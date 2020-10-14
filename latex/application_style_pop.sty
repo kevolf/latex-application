@@ -1,0 +1,201 @@
+%-------------------------------------------------------------------------------
+%-- define colors
+%-------------------------------------------------------------------------------
+\colorlet{skill_tag_color}{highlight_color}
+\colorlet{skill_bar_color}{highlight_color}
+
+%-------------------------------------------------------------------------------
+%-- configure document style
+%-------------------------------------------------------------------------------
+%-- titlepage ------------------------------------------------------------------
+\renewcommand{\cvTitlepageFirstNameStyle}[1]{%
+  {%
+    \fontsize{28pt}{1em}%
+    \upshape%
+    #1%
+  }%
+}
+\renewcommand{\cvTitlepageLastNameStyle}[1]{%
+  {%
+    \fontsize{28pt}{1em}%
+    \bfseries%
+    #1%
+  }%
+}
+\renewcommand{\cvTitlepageTitleStyle}[1]{%
+  {%
+    \fontsize{60pt}{1em}%
+    \bfseries%
+    \MakeUppercase{#1}%
+  }%
+}
+\renewcommand{\cvTitlepagePosition}[1]{%
+  {%
+    \fontsize{12pt}{1em}%
+    \slshape%
+    #1%
+  }%
+}
+\renewcommand{\cvTitlepageSubtitleStyle}[1]{%
+  {%
+    \fontsize{12pt}{1em}%
+    \slshape%
+    #1%
+  }%
+}
+
+%-- title styles ---------------------------------------------------------------
+\renewcommand{\chapterStyle}[1]{%
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[
+      color=highlight_color
+    ] (current page.south west) rectangle ++(\sideBarWidth,\paperheight);
+    \node[%
+      anchor=north west,
+      align=left,
+      rotate=90,
+      minimum height=\sideBarWidth,
+      minimum width=\pageheight,
+      font=\LARGE\color{white}
+    ] at (current page.south west)
+    {\resizebox{!}{0.3\sideBarWidth}{\MakeUppercase{#1}}};
+  \end{tikzpicture}
+  \raggedleft%
+  {%
+    \fontsize{120pt}{1em}%
+    \upshape%
+    \color{highlight_color}%
+    \chapterlabel
+  }
+}
+\renewcommand{\sectionStyle}[1]{%
+  \raggedleft%
+  {%
+    \fontsize{14pt}{1em}%
+    \scshape%
+    \addfontfeature{LetterSpace=8.0}%
+    \MakeUppercase{#1}%
+  }
+}
+\renewcommand{\subsectionStyle}[1]{%
+  \fontsize{12pt}{1em}%
+  \scshape%
+  #1%
+}
+
+%-- toc styles -----------------------------------------------------------------
+\renewcommand{\TocChaperStyle}{\Large}
+\renewcommand{\TocChaperPageStyle}{\Large\color{highlight_color}}
+\renewcommand{\TocSectionStyle}{\large}
+\renewcommand{\TocSectionPageStyle}{\large\color{highlight_color}}
+
+%-- fancy header / footer ------------------------------------------------------
+\renewcommand{\fancyHeadNameStyle}[2]{%
+  \textcolor{light_color}%
+  {#1~#2}
+}
+\renewcommand{\fancyFootNameStyle}[2]{}
+\renewcommand{\fancyHeadContactTextStyle}[1]{%
+  \textcolor{light_color}{#1}%
+}
+\renewcommand{\fancyHeadContactIconStyle}[1]{%
+  \textcolor{highlight_color}{#1}%
+}
+\renewcommand{\fancyHeadContactSepStyle}[1]{%
+  \textcolor{light_color}{#1}%
+}
+\renewcommand{\fancyFootLeftStyle}[1]{%
+  \textcolor{light_color}{#1}%
+}
+\renewcommand{\fancyFootSocialTextStyle}[1]{%
+  \textcolor{light_color}{#1}%
+}
+\renewcommand{\fancyFootSocialIconStyle}[1]{%
+  \textcolor{highlight_color}{#1}%
+}
+\renewcommand{\fancyFootSocialSepStyle}[1]{%
+  \textcolor{light_color}{#1}%
+}
+\renewcommand{\fancyFootPageStyle}[2]{
+  \textcolor{highlight_color}{#1}%
+  \textcolor{light_color}{/#2}%
+}
+
+%-- cv header ------------------------------------------------------------------
+\renewcommand{\headerFirstNameStyle}[1]{%
+  {%
+    \fontsize{32pt}{1em}%
+    \upshape%
+    \color{highlight_color}%
+    #1%
+  }%
+}
+\renewcommand{\headerLastNameStyle}[1]{%
+  {%
+    \fontsize{32pt}{1em}%
+    \bfseries%
+    \color{highlight_color}%
+    #1%
+  }%
+}
+\renewcommand{\headerPosition}[1]{%
+  {%
+    \fontsize{12pt}{1em}%
+    \slshape%
+    \textcolor{light_color}{#1}%
+  }%
+}
+
+%-- cv entry elements ----------------------------------------------------------
+\renewcommand{\cvEntryPositionStyle}[1]{%
+  {%
+    \fontsize{12pt}{1em}%
+    \bfseries%
+    \color{light_color}%
+    #1%
+  }%
+}
+\renewcommand{\cvEntryInstitutionStyle}[1]{%
+  {%
+    \fontsize{12pt}{1em}%
+    \upshape%
+    \color{light_color}%
+    #1%
+  }%
+}
+\renewcommand{\cvEntryDateStyle}[1]{%
+  \slshape%
+  \color{light_color}%
+  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+}
+\renewcommand{\cvEntryLocationStyle}[1]{%
+  \slshape%
+  \color{highlight_color}%
+  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+}
+\renewcommand{\cvEntryMarginNoteStyle}[1]{%
+  \slshape%
+  \color{light_color}%
+  #1%
+}
+\renewcommand{\cvEntryDescriptionStyle}[1]{#1}
+\renewcommand{\cvEntryShortDescriptionStyle}[1]{%
+  {%
+    \upshape%
+    \color{highlight_color}%
+    #1%
+  }
+}
+
+%-- reference elements ---------------------------------------------------------
+\renewcommand{\referencePositionStyle}[1]{\sectionStyle{#1}}
+\renewcommand{\referenceInstitutionStyle}[1]{\subsectionStyle{#1}}
+\renewcommand{\referenceDateStyle}[1]{\cvEntryDateStyle{#1}}
+\renewcommand{\referenceLocationStyle}[1]{\cvEntryLocationStyle{#1}}
+\renewcommand{\referenceDescriptionStyle}[1]{\cvEntryMarginNoteStyle{#1}}
+
+%-- other ----------------------------------------------------------------------
+\renewcommand{\skillTagTextStyle}{%
+  \fontsize{8pt}{1em}%
+  \upshape%
+}

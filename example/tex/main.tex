@@ -1,0 +1,47 @@
+%-------------------------------------------------------------------------------
+%-- document class
+%-------------------------------------------------------------------------------
+\documentclass[
+  a4paper,    % paper type
+  english,    % document language
+  tag_style       = skilltag_border,
+  highlight_color = 107896,
+  light_color     = 677073,
+  default_color   = 001E26,
+  tag_style       = skilltag_border,
+  style           = decent,
+  portrait_shape  = circle,
+  marginparwidth  = 4cm,
+  portrait_ratio  = 0.9,
+  header          = false,
+]{application}
+
+%-------------------------------------------------------------------------------
+% packages
+%-------------------------------------------------------------------------------
+\usepackage{lipsum}
+\usepackage{amssymb}
+\usepackage{setspace}
+
+%-------------------------------------------------------------------------------
+% personal infromation
+%-------------------------------------------------------------------------------
+\input{contact}
+
+\title{Application}
+\subtitle{as junior solution manger}
+
+\begin{document}
+\maketitle
+
+\tableofcontents
+\chapter{Cover Letter}
+\include{letter}
+
+\chapter{Curriculum Vit\ae}
+\include{cv}
+
+\chapter{References}
+\printreferences
+
+\end{document}
