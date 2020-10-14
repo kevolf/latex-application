@@ -963,7 +963,7 @@
   \def\cvEntry@institution{#3}
   \def\cvEntry@date{#4}
   \def\cvEntry@location{#5}
-  \def\cvEntry@description{#7}
+  \def\cvEntry@description{#6}
   \def\cvEntry@referenceOptions{}
   \def\cvEntry@referenceDescription{}
   \def\cvEntry@referencePages{{1}}
