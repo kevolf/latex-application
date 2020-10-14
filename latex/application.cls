@@ -40,12 +40,13 @@
   marginparwidth/.store in       = {\application@marginParWidth},
   references_to_toc/.is if       = {application@referencesToToc},
   header/.is if                  = {application@header},
+  % set default values
   highlight_color                = 107896,
   light_color                    = 677073,
   default_color                  = 001E26,
   tag_style                      = skilltag_border,
-  cventry_parsep                 = 0.3ex,
-  cventry_sep                    = 0pt,
+  cventry_parsep                 = 2pt,
+  cventry_sep                    = 3pt plus 1pt minus 1pt,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
@@ -161,7 +162,7 @@
 \newcommand{\chapterStyle}[1]{#1}
 \newcommand{\sectionStyle}[1]{#1}
 \newcommand{\subsectionStyle}[1]{#1}
-\newcommand{\sectionRule}{\titlerule[1pt]\\[\cvEntry@Sep]}
+\newcommand{\sectionRule}{\titlerule[1pt]\par\vspace{\cvEntry@Sep}}
 
 %-- toc styles -----------------------------------------------------------------
 \newcommand{\TocChaperStyle}{}
@@ -599,11 +600,11 @@
   right width/.store in=\twoColumns@rightWidth,
   ratio/.store in=\twoColumns@ratio,
   align/.store in=\twoColumns@align
-  % set default values
 }
 \newcommand{\twoColumns}[3][]{%
   \pgfkeys{%
     /two columns,%
+    % set default values
     ratio=0.5,%
     align=t,%
     left width=\twoColumns@ratio\textwidth,
@@ -686,6 +687,7 @@
 \newcommand{\socialIcon}[3][]{%
   \pgfkeys{%
     /social icon,%
+    % set default values
     text style={#1},%
     icon style={#1},%
     #1%
@@ -704,12 +706,12 @@
   icon style/.store in=\socialIcons@iconStyle,%
   sep style/.store in=\socialIcons@sepStyle,%
   sep/.store in=\socialIcons@sep%
-  % set default values
 }
 
 \newcommand{\socialIcons}[2][]{%
   \pgfkeys{%
     /social icons,%
+    % set default values
     text style={},%
     icon style={},%
     sep style={},
@@ -747,6 +749,7 @@
 \newcommand{\rightBoxedIcons}[2][]{%
   \pgfkeys{%
     /boxed icons,%
+    % set default values
     width=\textwidth,%
     text style={},%
     icon style={},%
@@ -772,6 +775,7 @@
 \newcommand{\leftBoxedIcons}[2][]{%
   \pgfkeys{%
     /boxed icons,%
+    % set default values
     width=\textwidth,%
     text style={},%
     icon style={},%
@@ -817,7 +821,7 @@
         \hspace{-0.5mm}%
         \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
         \ifdefined\application@position%
-          \\[0.5\parsep]%
+          \par\vspace{0.5\parsep}%
           \headerPosition{\application@position}%
         \fi
       }
@@ -854,7 +858,7 @@
       \hspace{-0.5mm}%
       \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
       \ifdefined\application@position%
-        \\[0.5\parsep]%
+        \par\vspace{0.5\parsep}%
         \headerPosition{\application@position}%
       \fi
     \end{minipage}
@@ -953,22 +957,26 @@
   reference/.store in=\cvEntry@reference,
   reference options/.store in=\cvEntry@referenceOptions,
   reference pages/.estore in=\cvEntry@referencePages,
-  reference description/.store in=\cvEntry@referenceDescription,
-  %reference/.code={\addReference[#1]{#1}{\cvEntry@referenceDescription}},
+  reference description/.store in=\cvEntry@referenceDescription
 }
 
 \newcommand{\cvEntry}[7][]{%
-  % parse pgfkeys
-  \def\cvEntry@position{#2}
-  \def\cvEntry@institution{#3}
-  \def\cvEntry@date{#4}
-  \def\cvEntry@location{#5}
-  \def\cvEntry@description{#6}
-  \def\cvEntry@referenceOptions{}
-  \def\cvEntry@referenceDescription{}
-  \def\cvEntry@referencePages{{1}}
+  \edef\cvEntry@position{#2}
+  \edef\cvEntry@institution{#3}
+  \edef\cvEntry@date{#4}
+  \edef\cvEntry@location{#5}
   \undef\cvEntry@reference
-  \pgfkeys{/cv entry, use tags=true, #1}%
+
+  % parse pgfkeys
+  \pgfkeys{%
+    /cv entry,%
+    % set default values
+    use tags=true,%
+    reference pages={1},%
+    reference options={},%
+    reference description={},
+    #1%
+  }%
 
   \ifdefined\cvEntry@reference
     \addReference[\cvEntry@referenceOptions]
@@ -978,34 +986,34 @@
   \fi
 
   \marginParagraph{%
-    \cvEntryDateStyle{\cvEntry@date}%
+    \cvEntryDateStyle{#4}%
     \isEmpty{#5}{}{%
-      \\[\cvEntry@ParSep]%
-      \cvEntryLocationStyle{\cvEntry@location}%
+      \par\vspace{\cvEntry@ParSep}%
+      \cvEntryLocationStyle{#5}%
     }%
     \ifdefined\cvEntry@marginNote%
-      \\[\cvEntry@ParSep]%
+      \par\vspace{\cvEntry@ParSep}%
       \cvEntryMarginNoteStyle{\cvEntry@marginNote}%
     \fi%
   }{%
     \cvEntryPositionStyle{\cvEntry@position}~~\cvEntryInstitutionStyle{\cvEntry@institution}%
     \isEmpty{#6}{}{%
-      \\[\cvEntry@ParSep]%
+      \par\vspace{\cvEntry@ParSep}%
       \ifcvEntry@useTags%
-        \skillTags{#6}
+        \skillTags{#6}%
       \else%
-        \cvEntryShortDescriptionStyle{#6}
+        \cvEntryShortDescriptionStyle{#6}%
       \fi%
     }%
     \isEmpty{#7}{}{%
-      \\[\cvEntry@ParSep]%
+      \par\vspace{\cvEntry@ParSep}%
       \begin{minipage}{\textwidth}%
         \setlength{\parskip}{0pt}
-        \cvEntryDescriptionStyle{\cvEntry@description}%
+        \cvEntryDescriptionStyle{#7}%
       \end{minipage}%
     }%
   }%
-  \\[\cvEntry@Sep]%
+  \par\vspace{\cvEntry@Sep}%
 }
 \newcommand{\printreferences}{\dolistloop{\cvEntry@references}}
 
@@ -1055,13 +1063,16 @@
   ending/.store in=\coverLetter@ending,
   signature/.store in=\coverLetter@signature,
   signature height/.store in=\coverLetter@signatureHeight,
-  % set default values
-  header=true,
-  ending=Yours,
-  signature height=3.5em
 }
 \newenvironment{coverletter}[2][]{%
-  \pgfkeys{/cover letter, #1}
+  \pgfkeys{%
+    /cover letter,%
+    % set default values
+    header=true,%
+    ending=Yours,%
+    signature height=3.5em,%
+    #1%
+  }
   \ifdefined\coverLetter@useHeader
     \def\tmpTrue{true}
     \def\tmpFalse{false}
@@ -1108,7 +1119,14 @@
   }%
 }
 \newenvironment{coverletter*}[2][]{%
-  \pgfkeys{/cover letter, #1}
+  \pgfkeys{%
+    /cover letter,%
+    % set default values
+    header=true,%
+    ending=Yours,%
+    signature height=3.5em,%
+    #1%
+  }
   \ifdefined\coverLetter@useHeader
     \header*
   \fi

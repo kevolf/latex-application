@@ -52,20 +52,20 @@
   \end{tikzpicture}
   \marginParagraph{%
     \raggedleft
-    {
+    {%
       \fontsize{120pt}{1em}%
       \upshape%
       \color{white}%
-      \chapterlabel
-    }
+      \chapterlabel%
+    }%
   }{%
-    {
+    {%
       \fontsize{42pt}{1em}%
       \upshape%
       \color{highlight_color}%
-      {\MakeUppercase{#1}}
-    }
-  }
+      {\MakeUppercase{#1}}%
+    }%
+  }%
 }
 \renewcommand{\sectionStyle}[1]{%
   \raggedleft%
@@ -74,7 +74,7 @@
     \scshape%
     \addfontfeature{LetterSpace=8.0}%
     \MakeUppercase{#1}%
-  }
+  }%
 }
 \renewcommand{\subsectionStyle}[1]{%
   \raggedleft%
@@ -82,7 +82,7 @@
     \slshape%
     \color{light_color}%
     #1%
-  }
+  }%
 }
 
 %-- toc styles -----------------------------------------------------------------
@@ -94,11 +94,11 @@
 %-- fancy header / footer ------------------------------------------------------
 \renewcommand{\fancyHeadNameStyle}[2]{%
   \textcolor{light_color}%
-  {#1~#2}
+  {#1~#2}%
 }
 \renewcommand{\fancyFootNameStyle}[2]{%
   \textcolor{white}%
-  {#1~#2}
+  {#1~#2}%
 }
 \renewcommand{\fancyHeadContactTextStyle}[1]{%
   \textcolor{light_color}{#1}%
@@ -190,7 +190,7 @@
     \upshape%
     \color{light_color}%
     #1%
-  }
+  }%
 }
 
 %-- reference elements ---------------------------------------------------------
