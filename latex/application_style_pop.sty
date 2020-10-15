@@ -78,9 +78,11 @@
   }
 }
 \renewcommand{\subsectionStyle}[1]{%
-  \fontsize{12pt}{1em}%
-  \scshape%
-  #1%
+  {%
+    \fontsize{12pt}{1em}%
+    \scshape%
+    #1%
+  }%
 }
 
 %-- toc styles -----------------------------------------------------------------
@@ -91,8 +93,7 @@
 
 %-- fancy header / footer ------------------------------------------------------
 \renewcommand{\fancyHeadNameStyle}[2]{%
-  \textcolor{light_color}%
-  {#1~#2}
+  \textcolor{light_color}{#1~#2}
 }
 \renewcommand{\fancyFootNameStyle}[2]{}
 \renewcommand{\fancyHeadContactTextStyle}[1]{%
@@ -164,19 +165,26 @@
   }%
 }
 \renewcommand{\cvEntryDateStyle}[1]{%
-  \slshape%
-  \color{light_color}%
-  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+  {%
+    \fontsize{12pt}{1em}%
+    \slshape%
+    \color{light_color}%
+    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+  }%
 }
 \renewcommand{\cvEntryLocationStyle}[1]{%
-  \slshape%
-  \color{highlight_color}%
-  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+  {%
+    \slshape%
+    \color{highlight_color}%
+    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+  }%
 }
 \renewcommand{\cvEntryMarginNoteStyle}[1]{%
-  \slshape%
-  \color{light_color}%
-  #1%
+  {%
+    \slshape%
+    \color{light_color}%
+    \rightBoxed[\marginparwidth]{#1}{\faIconStyle[regular]{info-circle}}%
+  }%
 }
 \renewcommand{\cvEntryDescriptionStyle}[1]{#1}
 \renewcommand{\cvEntryShortDescriptionStyle}[1]{%
@@ -184,7 +192,7 @@
     \upshape%
     \color{highlight_color}%
     #1%
-  }
+  }%
 }
 
 %-- reference elements ---------------------------------------------------------

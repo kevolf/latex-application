@@ -170,19 +170,26 @@
   }%
 }
 \renewcommand{\cvEntryDateStyle}[1]{%
-  \slshape%
-  \color{light_color}%
-  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+  {%
+    \fontsize{12pt}{1em}%
+    \slshape%
+    \color{light_color}%
+    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+  }%
 }
 \renewcommand{\cvEntryLocationStyle}[1]{%
-  \slshape%
-  \color{light_color}%
-  \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+  {%
+    \slshape%
+    \color{light_color}%
+    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+  }%
 }
 \renewcommand{\cvEntryMarginNoteStyle}[1]{%
-  \slshape%
-  \color{light_color}%
-  #1%
+  {%
+    \slshape%
+    \color{light_color}%
+    #1%
+  }%
 }
 \renewcommand{\cvEntryDescriptionStyle}[1]{#1}
 \renewcommand{\cvEntryShortDescriptionStyle}[1]{%
@@ -197,16 +204,16 @@
 \renewcommand{\referencePositionStyle}[1]{\sectionStyle{#1}}
 \renewcommand{\referenceInstitutionStyle}[1]{\subsectionStyle{#1}}
 \renewcommand{\referenceDateStyle}[1]{%
-  \raggedleft%
   {%
+    \raggedleft%
     \slshape%
     \color{light_color}%
     #1%
   }%
 }
 \renewcommand{\referenceLocationStyle}[1]{%
-  \raggedleft%
   {%
+    \raggedleft%
     \slshape%
     \color{light_color}%
     #1%
