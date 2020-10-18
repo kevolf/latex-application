@@ -25,7 +25,8 @@
 \cvEntry[%
     use tags = false,%
     reference = {ref/dummy},%
-    reference description = {Short description of reference}
+    reference description = {Short description of reference},
+    reference toc title = {This is a custom toc title}
   ]
   {M.Sc. Study Program}
   {University A}
@@ -36,7 +37,8 @@
 
 \cvEntry[%
     use tags = false,
-    reference = {ref/dummy}
+    reference = {ref/dummy},%
+    reference description = {This is the first reference for this entry},
   ]
   {B.Sc. Study Program}
   {University B}
@@ -44,6 +46,11 @@
   {Helsinki Area, Finland}
   {Major in Music and Art, $\varnothing$ 1.2}
   {}
+
+\addReference[toc title = {This is another custom toc title}]
+             {ref/dummy} % file
+             {1} % pages
+             {This is another reference for the same entry} % description
 
 %--[ PROFESSIONAL EXPERIENCE ]--------------------------------------------------
 \section*{Work}
@@ -69,6 +76,7 @@
       \item {And that}
     \end{cvitems}
   }
+
 \cvEntry
   {Position 2}
   {Company 2}

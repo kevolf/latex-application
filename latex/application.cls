@@ -888,7 +888,7 @@
 }
 
 %-- cv entry -------------------------------------------------------------------
-\newcommand{\reference}[8]{%
+\newcommand{\reference}[9]{%
   % Desc: Typeset a refference file
   % Useage: \reference{#1}{#2}{#3}{#4}{#5}{#6}{#7}{#8}
   % #1 -> position
@@ -899,12 +899,13 @@
   % #6 -> file
   % #7 -> pages
   % #8 -> options
-  \ifapplication@referencesToToc
-    \addcontentsline{toc}{section}{#1 -- #2}
-  \fi
+  % #8 -> toc title
   \foreach [count=\c] \p in {#7}{%
     \marginParagraph{%
       \ifnum\c=1
+        \ifapplication@referencesToToc
+          \addcontentsline{toc}{section}{#9}
+        \fi
         \referencePositionStyle{#1}\strut\par%
         \referenceInstitutionStyle{#2}\strut\par\bigskip%
         \referenceDateStyle{#3}%
@@ -931,14 +932,33 @@
     \clearpage
   }
 }
+\pgfkeys{%
+  /references/.is family,
+  /references/.cd,
+  % define keys
+  options/.store in=\reference@options,
+  toc title/.store in=\reference@tocTitle,
+}
 \def\cvEntry@references{}
 \newcommand{\addReference}[4][]{%
   % Desc: Append a refference to the refference list
-  % Useage: \appendReference{#1}{#2}{#3}
+  % Useage: \appendReference[#1]{#2}{#3}{#4}
   % #1 -> options
   % #2 -> file
   % #3 -> pages
   % #4 -> description
+  
+  % parse pgfkeys
+  \pgfkeys{%
+    /references,%
+    % set default values
+    options={},%
+    #1%
+  }%
+  \ifx\reference@tocTitle\undefined
+    \def\reference@tocTitle{\cvEntry@position -- \cvEntry@institution}
+  \fi
+
   \listeadd{\cvEntry@references}{%
     \noexpand%
     \reference{\cvEntry@position}
@@ -948,8 +968,11 @@
               {#4}
               {#2}
               {#3}
-              {#1}
+              {\reference@options}
+              {\reference@tocTitle}
   }
+
+  \undef\reference@tocTitle
 }
 
 \newif\ifcvEntry@useTags
@@ -960,9 +983,10 @@
   use tags/.is if=cvEntry@useTags,
   margin note/.store in=\cvEntry@marginNote,
   reference/.store in=\cvEntry@reference,
-  reference options/.store in=\cvEntry@referenceOptions,
+  reference options/.forward to=/references/options,
   reference pages/.estore in=\cvEntry@referencePages,
-  reference description/.store in=\cvEntry@referenceDescription
+  reference description/.store in=\cvEntry@referenceDescription,
+  reference toc title/.forward to=/references/toc title
 }
 
 \newcommand{\cvEntry}[7][]{%
@@ -978,14 +1002,12 @@
     % set default values
     use tags=true,%
     reference pages={1},%
-    reference options={},%
     reference description={},
     #1%
   }%
 
   \ifdefined\cvEntry@reference
-    \addReference[\cvEntry@referenceOptions]
-                 {\cvEntry@reference}
+    \addReference{\cvEntry@reference}
                  {\cvEntry@referencePages}
                  {\cvEntry@referenceDescription}
   \fi
