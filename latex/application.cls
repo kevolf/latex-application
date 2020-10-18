@@ -140,12 +140,14 @@
 \color{default_color}
 
 %-- lengths --------------------------------------------------------------------
+\newlength{\chapterSep}
+\setlength{\chapterSep}{2em}
 \newlength{\iconSep}
 \setlength{\iconSep}{1ex}
-\newlength{\portrait@width}
-\setlength{\portrait@width}{\application@portraitRatio\marginparwidth}
 \newlength{\sideBarWidth}
 \setlength{\sideBarWidth}{\marginparwidth + \leftmargin}
+\newlength{\portrait@width}
+\setlength{\portrait@width}{\application@portraitRatio\marginparwidth}
 
 
 %-------------------------------------------------------------------------------
@@ -245,8 +247,9 @@
         text width = \sideBarWidth-\marginparsep,
         font       = \color{white}
       ] (name) {
-        \cvTitlepageFirstNameStyle{\application@firstName}\\
-        \cvTitlepageLastNameStyle{\application@lastName}
+        \cvTitlepageFirstNameStyle{\application@firstName}%
+        \strut\par%
+        \cvTitlepageLastNameStyle{\application@lastName}%
       };
       \node[%
         above      = 0.25\sideBarWidth of side bar.south,
@@ -257,15 +260,16 @@
         font       = \color{white}
       ] (contact) {%
         \begin{minipage}{\marginparwidth}
-          \sectionStyle{\GetTranslation{contact}}\par\bigskip
+          \sectionStyle{\GetTranslation{contact}}%
+          \strut\par\bigskip%
           \ifdefined\application@contact%
-            \rightBoxedContactInfo
-          \fi
+            \rightBoxedContactInfo%
+          \fi%
         \end{minipage}
       };
       \node[%
-        right     = \marginparsep of name,
-        anchor    = west,
+        right     = \marginparsep of name.south east,
+        anchor    = south west,
         align     = left,
         inner sep = 0pt,
         font      = \color{highlight_color}
@@ -274,7 +278,7 @@
       };
       \ifdefined\application@position
         \node[%
-          below      = 1.5ex,
+          below      = 2ex,
           anchor     = north east,
           align      = right,
           inner sep  = 0pt,
@@ -290,7 +294,7 @@
       \fi
       \ifdefined\@subtitle
         \node[%
-          below     = 1.5ex of title.south west,
+          below     = 2ex of title.south west,
           anchor    = north west,
           align     = left,
           inner sep = 0pt,
@@ -329,10 +333,11 @@
   \chapterStyle
 }
 [% after-code
-  \ifnum\thechapter>0
+  \ifnum\thechapter>0%
     \clearpage%
-  \else
-  \fi
+  \else%
+    \vspace{\chapterSep}%
+  \fi%
 ]
 
 %-- section --------------------------------------------------------------------
@@ -410,14 +415,14 @@
         \raggedleft%
         \fancyHeadNameStyle{\application@firstName}{\application@lastName}
       \end{minipage} %
-      \ifdefined\application@contact%
+      \ifdefined\application@headIcons%
         \hspace{0.5\marginparsep}%
         \socialIcons[%
           text style=\fancyHeadContactTextStyle,
           icon style=\fancyHeadContactIconStyle,
           sep style=\fancyHeadContactSepStyle
         ]{%
-          \application@contact%
+          \application@headIcons%
         }
       \fi%
     }
@@ -429,13 +434,13 @@
       \fancyFootLeftStyle{\leftmark}
     \end{minipage}
     \hspace{0.5\marginparsep}%
-    \ifdefined\application@social
+    \ifdefined\application@footIcons
       \socialIcons[%
         text style=\fancyFootSocialTextStyle,
         icon style=\fancyFootSocialIconStyle,
         sep style=\fancyFootSocialSepStyle
       ]{%
-        \application@social%
+        \application@footIcons%
       }
     \fi
   }
@@ -459,13 +464,13 @@
       \fancyFootLeftStyle{\leftmark}
     \end{minipage}
     \hspace{0.5\marginparsep}%
-    \ifdefined\application@social
+    \ifdefined\application@footIcons
       \socialIcons[%
         text style=\fancyFootSocialTextStyle,
         icon style=\fancyFootSocialIconStyle,
         sep style=\fancyFootSocialSepStyle
       ]{%
-        \application@social%
+        \application@footIcons%
       }
     \fi
   }
@@ -561,7 +566,8 @@
   }
   \def\application@position{#2}}
 \newcommand{\contact}[1]{\def\application@contact{#1}}
-\newcommand{\social}[1]{\def\application@social{#1}}
+\newcommand{\footIcons}[1]{\def\application@footIcons{#1}}
+\newcommand{\headIcons}[1]{\def\application@headIcons{#1}}
 \newcommand{\portrait}[2][]{%
   \def\portrait@options{#1}
   \def\application@portrait{#2}
@@ -666,12 +672,12 @@
 %-- print social information ---------------------------------------------------
 \newcommand{\rightBoxedSocialIcons}[1][]{%
   \rightBoxedIcons[#1]{%
-    \application@social%
+    \application@footIcons%
   }%
 }
 \newcommand{\rightleftBoxedSocialIcons}[1][]{%
   \leftBoxedIcons[#1]{%
-    \application@social%
+    \application@footIcons%
   }%
 }
 
@@ -756,9 +762,9 @@
     #1%
   }%
   \foreach [count=\c] \i / \d / \h in #2{%
-    \ifnum\c>1
-      \\
-    \fi
+    \ifnum\c>1%
+      \strut\par%
+    \fi%
     \ifx\d\h%
       \rightBoxed[\boxedIcons@width]%
         {\boxedIcons@textStyle{\d}}%
@@ -767,10 +773,9 @@
       \href{\h}{%
         \rightBoxed[\boxedIcons@width]%
           {\boxedIcons@textStyle{\d}}%
-          {\boxedIcons@iconStyle{\faIconStyle{\i}}}%
-      }%
+          {\boxedIcons@iconStyle{\faIconStyle{\i}}}}%
     \fi%
-  }
+  }%
 }
 \newcommand{\leftBoxedIcons}[2][]{%
   \pgfkeys{%
@@ -782,9 +787,9 @@
     #1%
   }%
   \foreach [count=\c] \i / \d / \h in #2{%
-    \ifnum\c>1
-      \\
-    \fi
+    \ifnum\c>1%
+      \strut\par%
+    \fi%
     \ifx\d\h%
       \leftBoxed[\boxedIcons@width]%
         {\boxedIcons@iconStyle{\faIconStyle{\i}}}%
@@ -796,7 +801,7 @@
           {\boxedIcons@textStyle{\d}}%
       }%
     \fi%
-  }
+  }%
 }
 
 %-- cv elements ----------------------------------------------------------------
@@ -821,7 +826,7 @@
         \hspace{-0.5mm}%
         \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
         \ifdefined\application@position%
-          \par\vspace{0.5\parsep}%
+          \strut\par\vspace{0.5\parsep}%
           \headerPosition{\application@position}%
         \fi
       }
@@ -836,7 +841,7 @@
       }%
     \end{minipage}
   }
-  \bigskip\\
+  \strut\par\smallskip%
 }
 \WithSuffix\newcommand\header*{%
   \thispagestyle{nohead}
@@ -858,12 +863,12 @@
       \hspace{-0.5mm}%
       \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
       \ifdefined\application@position%
-        \par\vspace{0.5\parsep}%
+        \strut\par\vspace{0.5\parsep}%
         \headerPosition{\application@position}%
       \fi
     \end{minipage}
   }
-  \bigskip\\
+  \strut\par\smallskip%
 }
 
 \newcommand{\skillTag}[1]{%
@@ -900,15 +905,15 @@
   \foreach [count=\c] \p in {#7}{%
     \marginParagraph{%
       \ifnum\c=1
-        \referencePositionStyle{#1}\par%
-        \referenceInstitutionStyle{#2}\par\bigskip
+        \referencePositionStyle{#1}\strut\par%
+        \referenceInstitutionStyle{#2}\strut\par\bigskip%
         \referenceDateStyle{#3}%
         \isEmpty{#4}{}{%
-          \par%
+          \strut\par%
           \referenceLocationStyle{#4}%
         }%
         \isEmpty{#5}{}{%
-          \par\bigskip%
+          \strut\par\bigskip%
           \referenceDescriptionStyle{#5}%
         }%
       \fi
@@ -988,17 +993,17 @@
   \marginParagraph{%
     \cvEntryDateStyle{#4}%
     \isEmpty{#5}{}{%
-      \par\vspace{\cvEntry@ParSep}%
+      \strut\par\vspace{\cvEntry@ParSep}%
       \cvEntryLocationStyle{#5}%
     }%
     \ifdefined\cvEntry@marginNote%
-      \par\vspace{\cvEntry@ParSep}%
+      \strut\par\vspace{\cvEntry@ParSep}%
       \cvEntryMarginNoteStyle{\cvEntry@marginNote}%
     \fi%
   }{%
     \cvEntryPositionStyle{\cvEntry@position}~~\cvEntryInstitutionStyle{\cvEntry@institution}%
     \isEmpty{#6}{}{%
-      \par\vspace{\cvEntry@ParSep}%
+      \strut\par\vspace{\cvEntry@ParSep}%
       \ifcvEntry@useTags%
         \skillTags{#6}%
       \else%
@@ -1006,14 +1011,14 @@
       \fi%
     }%
     \isEmpty{#7}{}{%
-      \par\vspace{\cvEntry@ParSep}%
+      \strut\par\vspace{\cvEntry@ParSep}%
       \begin{minipage}{\textwidth}%
         \setlength{\parskip}{0pt}
         \cvEntryDescriptionStyle{#7}%
       \end{minipage}%
     }%
   }%
-  \par\vspace{\cvEntry@Sep}%
+  \strut\par\vspace{\cvEntry@Sep}%
 }
 \newcommand{\printreferences}{\dolistloop{\cvEntry@references}}
 
@@ -1073,48 +1078,50 @@
     signature height=3.5em,%
     #1%
   }
-  \ifdefined\coverLetter@useHeader
-    \def\tmpTrue{true}
-    \def\tmpFalse{false}
-    \ifx\coverLetter@useHeader\tmpTrue
-      \header
-    \else\ifx\coverLetter@useHeader\tmpFalse
-    \else
-      \header[\coverLetter@useHeader]
-    \else
-    \fi
-  \fi
+  \ifdefined\coverLetter@useHeader%
+    \def\tmpTrue{true}%
+    \def\tmpFalse{false}%
+    \ifx\coverLetter@useHeader\tmpTrue%
+      \header%
+    \else\ifx\coverLetter@useHeader\tmpFalse%
+    \else%
+      \header[\coverLetter@useHeader]%
+    \else%
+    \fi%
+  \fi%
   \begin{minipage}[t]{\textwidth}%
-    \textbf{#2}\par\bigskip
+    \textbf{#2}\strut\par\bigskip%
 }{%
-    \par
-    \coverLetter@ending,\par
-    \ifdefined\coverLetter@signature
-      \includegraphics[height=\coverLetter@signatureHeight]{\coverLetter@signature}\\
-    \fi
-    \application@firstName~\application@lastName
+    \strut\par%
+    \coverLetter@ending,\strut\par%
+    \ifdefined\coverLetter@signature%
+      \includegraphics[height=\coverLetter@signatureHeight]
+                      {\coverLetter@signature}%
+      \strut\par%
+    \fi%
+    \application@firstName~\application@lastName%
   \end{minipage}%
   \marginpar{%
     \begin{minipage}[t]{\marginparwidth}%
       \rightBoxedIcons[%
         width=\marginparwidth,%
         icon style=\textcolor{light_color},%
-        text style=\slshape\textcolor{light_color}
+        text style=\slshape\textcolor{light_color}%
       ]{%
         {%
           {calendar-alt}/{\today}%
-        }
-      }
+        }%
+      }%
       \ifdefined\coverLetter@recipientContact%
-        \par
+        \strut\par\bigskip%
         \rightBoxedIcons[%
           width=\marginparwidth,%
           icon style=\textcolor{light_color},%
           text style=\textcolor{light_color}
         ]{%
-          \coverLetter@recipientContact
-        }
-      \fi
+          \coverLetter@recipientContact%
+        }%
+      \fi%
     \end{minipage}%
   }%
 }
@@ -1127,40 +1134,42 @@
     signature height=3.5em,%
     #1%
   }
-  \ifdefined\coverLetter@useHeader
-    \header*
-  \fi
+  \ifdefined\coverLetter@useHeader%
+    \header*%
+  \fi%
   \begin{minipage}[t]{\textwidth}%
-    \textbf{#2}\par\bigskip
+    \textbf{#2}\strut\par\bigskip%
 }{%
-    \par
-    \coverLetter@ending,\par
-    \ifdefined\coverLetter@signature
-      \includegraphics[height=\coverLetter@signatureHeight]{\coverLetter@signature}\\
-    \fi
-    \application@firstName~\application@lastName
+    \strut\par%
+    \coverLetter@ending,\strut\par%
+    \ifdefined\coverLetter@signature%
+      \includegraphics[height=\coverLetter@signatureHeight]
+                      {\coverLetter@signature}%
+      \strut\par%
+    \fi%
+    \application@firstName~\application@lastName%
   \end{minipage}%
   \marginpar{%
     \begin{minipage}[t]{\marginparwidth}%
       \rightBoxedIcons[%
         width=\marginparwidth,%
         icon style=\textcolor{light_color},%
-        text style=\slshape\textcolor{light_color}
+        text style=\slshape\textcolor{light_color}%
       ]{%
         {%
           {calendar-alt}/{\today}%
-        }
-      }
+        }%
+      }%
       \ifdefined\coverLetter@recipientContact%
-        \par
+        \strut\par\bigskip%%
         \rightBoxedIcons[%
           width=\marginparwidth,%
           icon style=\textcolor{light_color},%
-          text style=\textcolor{light_color}
+          text style=\textcolor{light_color}%
         ]{%
-          \coverLetter@recipientContact
-        }
-      \fi
+          \coverLetter@recipientContact%
+        }%
+      \fi%
     \end{minipage}%
   }%
 }
