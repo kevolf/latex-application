@@ -901,6 +901,7 @@
   % #8 -> options
   % #8 -> toc title
   \foreach [count=\c] \p in {#7}{%
+    \phantomsection
     \marginParagraph{%
       \ifnum\c=1
         \ifapplication@referencesToToc
