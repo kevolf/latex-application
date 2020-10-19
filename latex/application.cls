@@ -40,6 +40,7 @@
   marginparwidth/.store in       = {\application@marginParWidth},
   references_to_toc/.is if       = {application@referencesToToc},
   header/.is if                  = {application@header},
+  referencelinewidth/.store in   = {\application@referenceLineWidth},
   % set default values
   highlight_color                = 107896,
   light_color                    = 677073,
@@ -51,6 +52,8 @@
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
   header                         = true,
+  references_to_toc              = true,
+  referencelinewidth             = 0pt,
   % filter handler to append any unprocessed options to a macro
   /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingoptions
 }
@@ -546,11 +549,12 @@
   },
   reference file/.style={
     draw,
+    line width = \application@referenceLineWidth,
+    inner sep= \application@referenceLineWidth,
     overlay,
     anchor=north west,
     align=center,
     fill=white,
-    inner sep=0
   }
 }
 
