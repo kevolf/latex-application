@@ -840,9 +840,9 @@
     \begin{minipage}[c][\portrait@width]{\textwidth}%
       \twoColumns[align=c,ratio=#1]{%
         \hspace{-0.5mm}%
-        \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
+        \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName\strut}%
         \ifdefined\application@position%
-          \strut\par\vspace{0.5\parsep}%
+          \par%
           \headerPosition{\application@position}%
         \fi
       }
@@ -877,14 +877,14 @@
   }{%
     \begin{minipage}[c][\portrait@width]{\textwidth}%
       \hspace{-0.5mm}%
-      \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName}%
+      \headerFirstNameStyle{\application@firstName}\quad\headerLastNameStyle{\application@lastName\strut}%
       \ifdefined\application@position%
-        \strut\par\vspace{0.5\parsep}%
-        \headerPosition{\application@position}%
+        \par%
+        \headerPosition{\application@position\strut}%
       \fi
     \end{minipage}
   }
-  \strut\par\smallskip%
+  \par\smallskip%
 }
 
 \newcommand{\skillTag}[1]{%
@@ -923,16 +923,16 @@
   \foreach [count=\c] \p in {#7}{%
     \marginParagraph{%
       \ifnum\c=1
-        \referencePositionStyle{#1}\strut\par%
-        \referenceInstitutionStyle{#2}\strut\par\bigskip%
-        \referenceDateStyle{#3}%
+        \referencePositionStyle{#1\strut}\par%
+        \referenceInstitutionStyle{#2\strut}\par\bigskip%
+        \referenceDateStyle{#3\strut}%
         \isEmpty{#4}{}{%
-          \strut\par%
-          \referenceLocationStyle{#4}%
+          \par%
+          \referenceLocationStyle{#4\strut}%
         }%
         \isEmpty{#5}{}{%
-          \strut\par\bigskip%
-          \referenceDescriptionStyle{#5}%
+          \par\bigskip%
+          \referenceDescriptionStyle{#5\strut}%
         }%
       \fi
     }{%
@@ -1144,7 +1144,7 @@
     \fi%
   \fi%
   \begin{minipage}[t]{\textwidth}%
-    \textbf{#2}\strut\par\bigskip%
+    \textbf{#2\strut}\par\bigskip%
 }{%
     \strut\par%
     \coverLetter@ending\strut\par%
@@ -1192,7 +1192,7 @@
     \header*%
   \fi%
   \begin{minipage}[t]{\textwidth}%
-    \textbf{#2}\strut\par\bigskip%
+    \textbf{#2\strut}\par\bigskip%
 }{%
     \strut\par%
     \coverLetter@ending\strut\par%
