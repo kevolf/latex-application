@@ -973,7 +973,7 @@
     #1%
   }%
   \ifx\reference@tocTitle\undefined%
-    \def\reference@tocTitle{\cvEntry@referencePosition -- \cvEntry@referenceInstution}%
+    \def\reference@tocTitle{\cvEntry@referencePosition\ --\ \cvEntry@referenceInstution}%
   \fi%
 
   \listeadd{\cvEntry@references}{%
