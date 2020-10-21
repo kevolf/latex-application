@@ -31,7 +31,7 @@
   default_color/.store in        = {\application@defaultColor},
   style/.store in                = {\application@Style},
   tag_style/.store in            = {\application@skillTagStyle},
-  cventry_parsep/.store in       = {\cvEntry@ParSep},
+  cventry_parskip/.store in      = {\cvEntry@parSkip},
   cventry_sep/.store in          = {\cvEntry@Sep},
   portrait_ratio/.store in       = {\application@portraitRatio},
   portrait_shape/.is choice,
@@ -46,7 +46,7 @@
   light_color                    = 677073,
   default_color                  = 001E26,
   tag_style                      = skilltag_border,
-  cventry_parsep                 = 2pt,
+  cventry_parskip                = 3pt,
   cventry_sep                    = 3pt plus 1pt minus 1pt,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
@@ -550,7 +550,7 @@
   reference file/.style={
     draw,
     line width = \application@referenceLineWidth,
-    inner sep= \application@referenceLineWidth,
+    inner sep = 0pt,
     overlay,
     anchor=north west,
     align=center,
@@ -596,9 +596,13 @@
 \setlength{\oldparskip}{\parskip}
 \newcommand{\@minipagerestore}{\setlength{\parskip}{\oldparskip}}
 \newcommand{\marginParagraph}[3][t]{%
-  \parbox[#1]{\textwidth}{#3}%
+    \begin{minipage}[#1]{\textwidth}%
+      #3%
+    \end{minipage}%
   \marginpar{%
-    \parbox[#1]{\marginparwidth}{#2}%
+    \begin{minipage}[#1]{\marginparwidth}%
+      #2%
+    \end{minipage}%
   }%
 }
 
@@ -904,13 +908,13 @@
   % #7 -> pages
   % #8 -> options
   % #8 -> toc title
+  \phantomsection
+  \ifapplication@referencesToToc
+    \addcontentsline{toc}{section}{#9}
+  \fi
   \foreach [count=\c] \p in {#7}{%
-    \phantomsection
     \marginParagraph{%
       \ifnum\c=1
-        \ifapplication@referencesToToc
-          \addcontentsline{toc}{section}{#9}
-        \fi
         \referencePositionStyle{#1}\strut\par%
         \referenceInstitutionStyle{#2}\strut\par\bigskip%
         \referenceDateStyle{#3}%
@@ -928,10 +932,10 @@
        reference file
       ]{%
        \includegraphics[%
-          width=\textwidth,
-          page=\p,
+          width=\textwidth,%
+          page=\p,%
           #8%
-        ]{#6}
+        ]{#6}%
       };
     }
     \clearpage
@@ -961,13 +965,13 @@
     #1%
   }%
   \ifx\reference@tocTitle\undefined
-    \def\reference@tocTitle{\cvEntry@position -- \cvEntry@institution}
+    \def\reference@tocTitle{\cvEntry@referencePosition -- \cvEntry@referenceInstution}
   \fi
 
   \listeadd{\cvEntry@references}{%
     \noexpand%
-    \reference{\cvEntry@position}
-              {\cvEntry@institution}
+    \reference{\cvEntry@referencePosition}
+              {\cvEntry@referenceInstution}
               {\cvEntry@date}
               {\cvEntry@location}
               {#4}
@@ -988,15 +992,15 @@
   use tags/.is if=cvEntry@useTags,
   margin note/.store in=\cvEntry@marginNote,
   reference/.store in=\cvEntry@reference,
+  reference description/.store in=\cvEntry@referenceDescription,
+  reference position short/.store  in=\cvEntry@referencePosition,
+  reference institution short/.store  in=\cvEntry@referenceInstution,
   reference options/.forward to=/references/options,
   reference pages/.estore in=\cvEntry@referencePages,
-  reference description/.store in=\cvEntry@referenceDescription,
-  reference toc title/.forward to=/references/toc title
+  reference toc title/.forward to=/references/toc title,
 }
 
 \newcommand{\cvEntry}[7][]{%
-  \edef\cvEntry@position{#2}
-  \edef\cvEntry@institution{#3}
   \edef\cvEntry@date{#4}
   \edef\cvEntry@location{#5}
   \undef\cvEntry@reference
@@ -1008,6 +1012,8 @@
     use tags=true,%
     reference pages={1},%
     reference description={},
+    reference position short={#2},
+    reference institution short={#3},
     #1%
   }%
 
@@ -1018,19 +1024,21 @@
   \fi
 
   \marginParagraph{%
+    \setlength{\parskip}{\cvEntry@parSkip}%
     \cvEntryDateStyle{#4}%
     \isEmpty{#5}{}{%
-      \strut\par\vspace{\cvEntry@ParSep}%
+      \strut\par%
       \cvEntryLocationStyle{#5}%
     }%
     \ifdefined\cvEntry@marginNote%
-      \strut\par\vspace{\cvEntry@ParSep}%
+      \strut\par%
       \cvEntryMarginNoteStyle{\cvEntry@marginNote}%
     \fi%
   }{%
-    \cvEntryPositionStyle{\cvEntry@position}~~\cvEntryInstitutionStyle{\cvEntry@institution}%
+    \setlength{\parskip}{\cvEntry@parSkip}%
+    \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3}%
     \isEmpty{#6}{}{%
-      \strut\par\vspace{\cvEntry@ParSep}%
+      \strut\par%
       \ifcvEntry@useTags%
         \skillTags{#6}%
       \else%
@@ -1038,9 +1046,9 @@
       \fi%
     }%
     \isEmpty{#7}{}{%
-      \strut\par\vspace{\cvEntry@ParSep}%
+      \strut\par%
       \begin{minipage}{\textwidth}%
-        \setlength{\parskip}{0pt}
+        \setlength{\parskip}{\cvEntry@parSkip}
         \cvEntryDescriptionStyle{#7}%
       \end{minipage}%
     }%
@@ -1120,7 +1128,7 @@
     \textbf{#2}\strut\par\bigskip%
 }{%
     \strut\par%
-    \coverLetter@ending,\strut\par%
+    \coverLetter@ending\strut\par%
     \ifdefined\coverLetter@signature%
       \includegraphics[height=\coverLetter@signatureHeight]
                       {\coverLetter@signature}%
@@ -1168,7 +1176,7 @@
     \textbf{#2}\strut\par\bigskip%
 }{%
     \strut\par%
-    \coverLetter@ending,\strut\par%
+    \coverLetter@ending\strut\par%
     \ifdefined\coverLetter@signature%
       \includegraphics[height=\coverLetter@signatureHeight]
                       {\coverLetter@signature}%
