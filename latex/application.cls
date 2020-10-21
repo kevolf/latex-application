@@ -32,7 +32,6 @@
   style/.store in                = {\application@Style},
   tag_style/.store in            = {\application@skillTagStyle},
   cventry_parskip/.store in      = {\cvEntry@parSkip},
-  cventry_sep/.store in          = {\cvEntry@Sep},
   portrait_ratio/.store in       = {\application@portraitRatio},
   portrait_shape/.is choice,
   portrait_shape/circle/.code    = {\def\portrait@Shape{circle}},
@@ -47,7 +46,6 @@
   default_color                  = 001E26,
   tag_style                      = skilltag_border,
   cventry_parskip                = 3pt,
-  cventry_sep                    = 3pt plus 1pt minus 1pt,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
@@ -167,7 +165,7 @@
 \newcommand{\chapterStyle}[1]{#1}
 \newcommand{\sectionStyle}[1]{#1}
 \newcommand{\subsectionStyle}[1]{#1}
-\newcommand{\sectionRule}{\titlerule[1pt]\par\vspace{\cvEntry@Sep}}
+\newcommand{\sectionRule}{\titlerule[1pt]\newline}
 
 %-- toc styles -----------------------------------------------------------------
 \newcommand{\TocChaperStyle}{}
@@ -243,20 +241,30 @@
         ] (portrait) at (current page.north west) {};%
       \fi
       \node[%
-        below      = 1.5\sideBarWidth of side bar.north,
+        below      = 1.5\sideBarWidth of side bar.north east,
+        xshift     = -\marginparsep/2,
+        anchor     = north east,
+        align      = right,
+        inner sep  = 0pt,
+        text width = \sideBarWidth-\marginparsep,
+        font       = \color{white}
+      ] (first name) {
+        \cvTitlepageFirstNameStyle{\application@firstName\strut}
+      };
+      \node[%
+        below      = \parskip of first name.south,
         anchor     = north,
         align      = right,
         inner sep  = 0pt,
         text width = \sideBarWidth-\marginparsep,
         font       = \color{white}
-      ] (name) {
-        \cvTitlepageFirstNameStyle{\application@firstName}%
-        \strut\par%
-        \cvTitlepageLastNameStyle{\application@lastName}%
+      ] (last name) {
+        \cvTitlepageLastNameStyle{\application@lastName\strut}
       };
       \node[%
-        above      = 0.25\sideBarWidth of side bar.south,
-        anchor     = south,
+        above      = 0.25\sideBarWidth of side bar.south east,
+        xshift     = -\marginparsep/2,
+        anchor     = south east,
         align      = right,
         inner sep  = 0pt,
         text width = \sideBarWidth-\marginparsep,
@@ -271,23 +279,23 @@
         \end{minipage}
       };
       \node[%
-        right     = \marginparsep of name.south east,
-        anchor    = south west,
-        align     = left,
+        right     = \marginparsep,
+        anchor    = base west,
+        align     = right,
         inner sep = 0pt,
         font      = \color{highlight_color}
-      ] (title) {
+      ] (title)  at (last name.base east) {
         \cvTitlepageTitleStyle{\@title}
       };
       \ifdefined\application@position
         \node[%
-          below      = 2ex,
+          below      = 2\parskip,
           anchor     = north east,
           align      = right,
           inner sep  = 0pt,
           text width = \sideBarWidth-\marginparsep,
           font       = \color{white}
-        ] (position) at (name.east |- title.south west){
+        ] (position) at (last name.east |- title.south west){
           \ifdefined\application@positionShort
             \cvTitlepagePosition{\application@positionShort}
           \else
@@ -297,13 +305,13 @@
       \fi
       \ifdefined\@subtitle
         \node[%
-          below     = 2ex of title.south west,
+          below     = 2\parskip of title.south west,
           anchor    = north west,
           align     = left,
           inner sep = 0pt,
           font      = \color{highlight_color}
         ] (subtitle) {
-          \cvTitlepageSubtitleStyle{\@subtitle}
+          \cvTitlepageSubtitleStyle{\@subtitle\strut}
         };
       \fi
     \end{tikzpicture}
@@ -637,7 +645,7 @@
 }
 
 \newcommand{\rightBoxed}[3][\textwidth]{%
-  \begin{minipage}[c]{#1}%
+  \begin{minipage}{#1}%
     \parbox[t]{#1 - 6mm - \iconSep}{%
       \raggedleft%
       #2%
@@ -650,7 +658,7 @@
   \end{minipage}%
 }
 \newcommand{\leftBoxed}[3][\textwidth]{%
-  \begin{minipage}[c]{#1}%
+  \begin{minipage}{#1}%
     \parbox[t]{6mm}{%
       \centering%
       #2%
@@ -964,24 +972,24 @@
     options={},%
     #1%
   }%
-  \ifx\reference@tocTitle\undefined
-    \def\reference@tocTitle{\cvEntry@referencePosition -- \cvEntry@referenceInstution}
-  \fi
+  \ifx\reference@tocTitle\undefined%
+    \def\reference@tocTitle{\cvEntry@referencePosition -- \cvEntry@referenceInstution}%
+  \fi%
 
   \listeadd{\cvEntry@references}{%
     \noexpand%
-    \reference{\cvEntry@referencePosition}
-              {\cvEntry@referenceInstution}
-              {\cvEntry@date}
-              {\cvEntry@location}
-              {#4}
-              {#2}
-              {#3}
-              {\reference@options}
-              {\reference@tocTitle}
-  }
+    \reference{\cvEntry@referencePosition}%
+              {\cvEntry@referenceInstution}%
+              {\cvEntry@date}%
+              {\cvEntry@location}%
+              {#4}%
+              {#2}%
+              {#3}%
+              {\reference@options}%
+              {\reference@tocTitle}%
+  }%
 
-  \undef\reference@tocTitle
+  \undef\reference@tocTitle%
 }
 
 \newif\ifcvEntry@useTags
@@ -1001,9 +1009,19 @@
 }
 
 \newcommand{\cvEntry}[7][]{%
-  \edef\cvEntry@date{#4}
-  \edef\cvEntry@location{#5}
-  \undef\cvEntry@reference
+  % Desc: Typeset deverse cv elemnts
+  % Useage: \appendReference[#1]{#2}{#3}{#4}{#5}{#6}{#7}
+  % #1 -> options
+  % #2 -> position
+  % #3 -> institution
+  % #4 -> period
+  % #5 -> location
+  % #6 -> tags / subtext
+  % #7 -> description
+
+  \edef\cvEntry@date{#4}%
+  \edef\cvEntry@location{#5}%
+  \undef\cvEntry@reference%
 
   % parse pgfkeys
   \pgfkeys{%
@@ -1011,49 +1029,50 @@
     % set default values
     use tags=true,%
     reference pages={1},%
-    reference description={},
-    reference position short={#2},
-    reference institution short={#3},
+    reference description={},%
+    reference position short={#2},%
+    reference institution short={#3},%
     #1%
   }%
 
-  \ifdefined\cvEntry@reference
-    \addReference{\cvEntry@reference}
-                 {\cvEntry@referencePages}
-                 {\cvEntry@referenceDescription}
-  \fi
+  \ifdefined\cvEntry@reference%
+    \addReference{\cvEntry@reference}%
+                 {\cvEntry@referencePages}%
+                 {\cvEntry@referenceDescription}%
+  \fi%
 
   \marginParagraph{%
     \setlength{\parskip}{\cvEntry@parSkip}%
-    \cvEntryDateStyle{#4}%
+    \cvEntryDateStyle{#4\strut}%
     \isEmpty{#5}{}{%
-      \strut\par%
-      \cvEntryLocationStyle{#5}%
+      \par%
+      \cvEntryLocationStyle{#5\strut}%
     }%
     \ifdefined\cvEntry@marginNote%
-      \strut\par%
+      \par%
       \cvEntryMarginNoteStyle{\cvEntry@marginNote}%
     \fi%
   }{%
     \setlength{\parskip}{\cvEntry@parSkip}%
-    \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3}%
+    \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3\strut}%
     \isEmpty{#6}{}{%
-      \strut\par%
+      \par%
       \ifcvEntry@useTags%
         \skillTags{#6}%
       \else%
         \cvEntryShortDescriptionStyle{#6}%
       \fi%
+      \strut%
     }%
     \isEmpty{#7}{}{%
-      \strut\par%
+      \par%
       \begin{minipage}{\textwidth}%
         \setlength{\parskip}{\cvEntry@parSkip}
         \cvEntryDescriptionStyle{#7}%
       \end{minipage}%
     }%
   }%
-  \strut\par\vspace{\cvEntry@Sep}%
+  \par%
 }
 \newcommand{\printreferences}{\dolistloop{\cvEntry@references}}
 
