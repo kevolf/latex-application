@@ -23,6 +23,7 @@
 %-- define key-value-pairs -----------------------------------------------------
 \RequirePackage{pgfopts} % to process pgfkeys as packages options
 \newif\ifapplication@referencesToToc
+\newif\ifapplication@referencesLinks
 \newif\ifapplication@header
 \pgfkeys{%
   /application/.cd, % working path for keys
@@ -39,6 +40,7 @@
   portrait_shape/rectangle/.code = {\def\portrait@Shape{}},
   marginparwidth/.store in       = {\application@marginParWidth},
   references_to_toc/.is if       = {application@referencesToToc},
+  references_links/.is if        = {application@referencesLinks},
   header/.is if                  = {application@header},
   referencelinewidth/.store in   = {\application@referenceLineWidth},
   % set default values
@@ -53,6 +55,7 @@
   portrait_ratio                 = 0.9,
   header                         = true,
   references_to_toc              = true,
+  references_links               = true,
   referencelinewidth             = 0pt,
   % filter handler to append any unprocessed options to a macro
   /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingoptions
@@ -559,13 +562,12 @@
     }
   },
   reference file/.style={
-    draw,
-    line width = \application@referenceLineWidth,
-    inner sep = 0pt,
-    overlay,
-    anchor=north west,
     align=center,
+    anchor=north west,
+    draw,
     fill=white,
+    inner sep = 0pt,
+    line width = \application@referenceLineWidth
   }
 }
 
@@ -919,10 +921,10 @@
   % #7 -> pages
   % #8 -> options
   % #8 -> toc title
-  \phantomsection
-  \ifapplication@referencesToToc
-    \addcontentsline{toc}{section}{#9}
-  \fi
+  \phantomsection\label{#6}%
+  \ifapplication@referencesToToc%
+    \addcontentsline{toc}{section}{#9}%
+  \fi%
   \foreach [count=\c] \p in {#7}{%
     \marginParagraph{%
       \ifnum\c=1%
@@ -1043,7 +1045,6 @@
                  {\cvEntry@referencePages}%
                  {\cvEntry@referenceDescription}%
   \fi%
-
   \marginParagraph{%
     \setlength{\parskip}{\cvEntry@parSkip}%
     \cvEntryDateStyle{#4\strut}%
@@ -1058,6 +1059,11 @@
   }{%
     \setlength{\parskip}{\cvEntry@parSkip}%
     \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3\strut}%
+    \ifapplication@referencesLinks%
+      \ifdefined\cvEntry@reference%
+          \hfill\hyperref[\cvEntry@reference]{\textcolor{light_color}{\faIconStyle{link}}}%
+      \fi%
+    \fi%
     \isEmpty{#6}{}{%
       \par%
       \ifcvEntry@useTags%
