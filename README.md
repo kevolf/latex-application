@@ -14,11 +14,11 @@ Based on the README Tamplate from: https://github.com/othneildrew/Best-README-Te
 <!-- MarkdownTOC autolink="true" levels="2,3" -->
 
 - [About The Project](#about-the-project)
-  - [Preview](#preview)
+	- [Preview](#preview)
 - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Installation](#installation)
-  - [Usage](#usage)
+	- [Prerequisites](#prerequisites)
+	- [Installation](#installation)
+	- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -27,22 +27,17 @@ Based on the README Tamplate from: https://github.com/othneildrew/Best-README-Te
 ## About The Project
 
 This is a LaTex class for modern job applications.
-It has been heavily inspired by [Awesome CV][awesome-cv].
+It has been inspired by [Awesome CV][awesome-cv].
 
-It includes convenient macros to typeset your *application letter* and *CV* and manage the corresponding *references* in a single document.
+It includes convenient macros to typeset your *cover letter* and *CV* and manage the corresponding *references* in a single document.
 
 Additionally, separating pages for each chapter and a modern title page are handled automatically.
 
 ### Preview
 
-#### Titlepage
-![titlepage][titelpage]
-
-#### Cover Letter
-![Cover Letter][coverletter]
-
-#### Curriculum Vita
-![CV][cv]
+|                Titlepage                 |                  Cover Letter                   |  Curriculum Vitae   |
+|:----------------------------------------:|:-----------------------------------------------:|:-------------------:|
+| [![titlepage][titelpage]][titlepage-pdf] | [![Cover Letter][coverletter]][coverletter-pdf] | [![CV][cv]][cv-pdf] |
 
 ## Getting Started
 
@@ -119,7 +114,10 @@ This work is licensed under a
 [cc-by-sa]: http://creativecommons.org/licenses/by-sa/4.0/
 [awesome-cv]: https://github.com/posquit0/Awesome-CV
 [titelpage]: svg/titlepage.svg
+[titlepage-pdf]: https://raw.githubusercontent.com/kevolf/latex-application/main/example/out/main.pdf#page=1
 [coverletter]: svg/cover_letter.svg
+[coverletter-pdf]: https://raw.githubusercontent.com/kevolf/latex-application/main/example/out/main.pdf#page=4
 [cv]: svg/cv.svg
+[cv-pdf]: https://raw.githubusercontent.com/kevolf/latex-application/main/example/out/main.pdf#page=6
 [latexmk]: https://ctan.org/pkg/latexmk?lang=en
 [cc-by-sa-image]: https://licensebuttons.net/l/by-sa/4.0/88x31.png

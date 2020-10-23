@@ -44,7 +44,7 @@
   header/.is if                  = {application@header},
   referencelinewidth/.store in   = {\application@referenceLineWidth},
   % set default values
-  highlight_color                = 107896,
+  highlight_color                = 4472A7,
   light_color                    = 677073,
   default_color                  = 001E26,
   tag_style                      = skilltag_border,
