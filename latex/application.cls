@@ -925,7 +925,7 @@
   \fi
   \foreach [count=\c] \p in {#7}{%
     \marginParagraph{%
-      \ifnum\c=1
+      \ifnum\c=1%
         \referencePositionStyle{#1\strut}\par%
         \referenceInstitutionStyle{#2\strut}\par\bigskip%
         \referenceDateStyle{#3\strut}%
@@ -937,20 +937,20 @@
           \par\bigskip%
           \referenceDescriptionStyle{#5\strut}%
         }%
-      \fi
+      \fi%
     }{%
       \tikz[baseline=-1em]\node[%
-       reference file
+       reference file%
       ]{%
        \includegraphics[%
           width=\textwidth,%
           page=\p,%
           #8%
         ]{#6}%
-      };
-    }
-    \clearpage
-  }
+      };%
+    }%
+    \clearpage%
+  }%
 }
 \pgfkeys{%
   /references/.is family,

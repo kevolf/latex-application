@@ -24,6 +24,7 @@ CMD_MV      = mv
 CMD_MKDIR   = mkdir -p
 CMD_LATEXMK = latexmk
 
+PRINT   = @printf "%s\n"
 MSG_START   = @printf "[START] %s\n"
 MSG_END     = @printf "[DONE] %s\n"
 
@@ -38,7 +39,7 @@ CLEAN_MSG = "removing temporary files"
 
 # Make shortcuts
 # $@ file named on the left side of ':'
-# $^ file named on the right site of ':'
+# $^ file named on the right site of ':' 
 # $< first item in the list
 # 
 # %.c random filename with suffix '.c'
@@ -46,8 +47,8 @@ CLEAN_MSG = "removing temporary files"
 .PHONY: clean pdf $(TEX_ROOT).pdf
 pdf: $(TEX_ROOT).pdf
 
-pvc: TEX_FLAGS += -interaction=nonstopmode --pvc
-pvc: $(TEX_ROOT).pdf
+live: TEX_FLAGS += -interaction=nonstopmode --pvc
+live: $(TEX_ROOT).pdf
 
 # GENERATE PDF FILE
 $(TEX_ROOT).pdf: $(TEX_DIR)/$(TEX_ROOT).tex
@@ -67,6 +68,7 @@ clean:
 help:
 	$(PRINT) "This makefile is used to build LaTeX documents"
 	$(PRINT) "========================================================================="
-	$(PRINT) "make pdf................................................generate $(TEX_ROOT).tex"
+	$(PRINT) "make pdf................................................generate $(TEX_ROOT).pdf"
+	$(PRINT) "make live............................................live update $(TEX_ROOT).pdf"
 	$(PRINT) "make help..........................................display this help text"
 	$(PRINT) "make clean.........................................remove temporary files"
