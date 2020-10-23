@@ -32,6 +32,7 @@
   style/.store in                = {\application@Style},
   tag_style/.store in            = {\application@skillTagStyle},
   cventry_parskip/.store in      = {\cvEntry@parSkip},
+  cventry_sep/.store in          = {\cvEntry@sep},
   portrait_ratio/.store in       = {\application@portraitRatio},
   portrait_shape/.is choice,
   portrait_shape/circle/.code    = {\def\portrait@Shape{circle}},
@@ -46,6 +47,7 @@
   default_color                  = 001E26,
   tag_style                      = skilltag_border,
   cventry_parskip                = 3pt,
+  cventry_sep                    = 0pt,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
@@ -84,7 +86,7 @@
 \RequirePackage{fancyhdr} % manage header & footer
 \RequirePackage[fixed]{fontawesome5} % icons
 \RequirePackage{ifthen} % advance conditionals
-\RequirePackage{lastpage} % get last page number
+\RequirePackage{zref-lastpage} % get last page number
 \RequirePackage{parskip} % no indentions
 \RequirePackage{progressbar} % skill bars
 \RequirePackage{suffix} % defined starred version of command
@@ -394,8 +396,9 @@
 
 %-- spacing --------------------------------------------------------------------
 %titlespacing{〈command〉}{〈left〉}{〈before-sep〉}{〈after-sep〉}[〈right-sep〉]
+%<space> plus <+tol> minus <-tol>
 \titlespacing{\chapter}{0pt}{1em plus 0.5em minus 0.5em}{0pt}
-\titlespacing{\section}{\marginparwidth}{1.5em plus 0.5em minus 0.5em}{\marginparsep}
+\titlespacing{\section}{\marginparwidth}{2em plus 1em minus 1em}{\marginparsep}
 \titlespacing{\subsection}{\marginparwidth}{0pt}{\marginparsep}
 
 
@@ -457,15 +460,13 @@
   }
 
   \fancyfoot[R]{%
-    \fancyFootPageStyle{\thepage}{\pageref*{LastPage}}%
+    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
+      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
+    \fi%
   }
 }
 \fancypagestyle{chapter}{%
   \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
-
-  \fancyfoot[R]{%
-    \fancyFootPageStyle{\thepage}{\pageref*{LastPage}}%
-  }
 }
 \fancypagestyle{nohead}{%
   \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
@@ -487,7 +488,9 @@
   }
 
   \fancyfoot[R]{%
-    \fancyFootPageStyle{\thepage}{\pageref*{LastPage}}%
+    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
+      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
+    \fi%
   }
 }
 
@@ -1072,7 +1075,7 @@
       \end{minipage}%
     }%
   }%
-  \par%
+  \par\vspace{\cvEntry@sep}%
 }
 \newcommand{\printreferences}{\dolistloop{\cvEntry@references}}
 

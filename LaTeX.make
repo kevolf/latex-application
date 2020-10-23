@@ -5,6 +5,7 @@ TEX_ROOT ?= main
 ###############################################################################
 # PATH SETTINGS
 TEX_DIR ?= tex
+OUT_DIR ?= out
 VPATH += $(TEX_DIR)
 
 ###############################################################################
@@ -13,7 +14,7 @@ TEX_FILES += $(wildcard $(TEX_DIR)/*.tex)
 
 ###############################################################################
 # COMPILER SETTINGS
-TEX_FLAGS ?= -pdf
+TEX_FLAGS ?= -pdf -interaction=nonstopmode -output-directory=${OUT_DIR}
 
 ###############################################################################
 # COMMANDS
@@ -22,16 +23,7 @@ CMD_CP      = cp
 CMD_MV      = mv
 CMD_MKDIR   = mkdir -p
 CMD_LATEXMK = latexmk
-UNAME_S := $(shell uname -s)
 
-ifeq ($(UNAME_S),Darwin)
-  	# => MAC OS
-	CMD_SED     = gsed
-else
-	# Found => LINUX
-	CMD_SED     = sed
-endif
-PRINT       = @printf "%s\n"
 MSG_START   = @printf "[START] %s\n"
 MSG_END     = @printf "[DONE] %s\n"
 
@@ -53,6 +45,9 @@ CLEAN_MSG = "removing temporary files"
 
 .PHONY: clean pdf $(TEX_ROOT).pdf
 pdf: $(TEX_ROOT).pdf
+
+pvc: TEX_FLAGS += -interaction=nonstopmode --pvc
+pvc: $(TEX_ROOT).pdf
 
 # GENERATE PDF FILE
 $(TEX_ROOT).pdf: $(TEX_DIR)/$(TEX_ROOT).tex
