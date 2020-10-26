@@ -34,6 +34,7 @@
   tag_style/.store in            = {\application@skillTagStyle},
   cventry_parskip/.store in      = {\cvEntry@parSkip},
   cventry_sep/.store in          = {\cvEntry@sep},
+  section_sep/.store in          = {\application@sectionSep},
   portrait_ratio/.store in       = {\application@portraitRatio},
   portrait_shape/.is choice,
   portrait_shape/circle/.code    = {\def\portrait@Shape{circle}},
@@ -50,6 +51,7 @@
   tag_style                      = skilltag_border,
   cventry_parskip                = 3pt,
   cventry_sep                    = 0pt,
+  section_sep                    = 2em plus 1em minus 1em,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
@@ -401,7 +403,7 @@
 %titlespacing{〈command〉}{〈left〉}{〈before-sep〉}{〈after-sep〉}[〈right-sep〉]
 %<space> plus <+tol> minus <-tol>
 \titlespacing{\chapter}{0pt}{1em plus 0.5em minus 0.5em}{0pt}
-\titlespacing{\section}{\marginparwidth}{2em plus 1em minus 1em}{\marginparsep}
+\titlespacing{\section}{\marginparwidth}{\application@sectionSep}{\marginparsep}
 \titlespacing{\subsection}{\marginparwidth}{0pt}{\marginparsep}
 
 
@@ -1027,6 +1029,7 @@
   \edef\cvEntry@date{#4}%
   \edef\cvEntry@location{#5}%
   \undef\cvEntry@reference%
+  \undef\cvEntry@marginNote%
 
   % parse pgfkeys
   \pgfkeys{%
