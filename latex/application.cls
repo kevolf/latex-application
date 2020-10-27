@@ -864,7 +864,7 @@
       }%
     \end{minipage}
   }
-  \strut\par\smallskip%
+  \par\bigskip%
 }
 \WithSuffix\newcommand\header*{%
   \thispagestyle{nohead}
@@ -891,7 +891,7 @@
       \fi
     \end{minipage}
   }
-  \par\smallskip%
+  \par\bigskip%
 }
 
 \newcommand{\skillTag}[1]{%
