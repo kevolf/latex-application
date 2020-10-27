@@ -1175,7 +1175,7 @@
         text style=\slshape\textcolor{light_color}%
       ]{%
         {%
-          {calendar-alt}/{\today}%
+          {calendar}/{\today}%
         }%
       }%
       \ifdefined\coverLetter@recipientContact%
@@ -1223,7 +1223,7 @@
         text style=\slshape\textcolor{light_color}%
       ]{%
         {%
-          {calendar-alt}/{\today}%
+          {calendar}/{\today}%
         }%
       }%
       \ifdefined\coverLetter@recipientContact%
