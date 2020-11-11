@@ -1064,7 +1064,9 @@
     \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3\strut}%
     \ifapplication@referencesLinks%
       \ifdefined\cvEntry@reference%
+        \ifdefined\application@referencesPrinted
           \hfill\hyperref[\cvEntry@reference]{\textcolor{light_color}{\faIconStyle{link}}}%
+        \fi
       \fi%
     \fi%
     \isEmpty{#6}{}{%
@@ -1086,7 +1088,12 @@
   }%
   \par\vspace{\cvEntry@sep}%
 }
-\newcommand{\printreferences}{\dolistloop{\cvEntry@references}}
+\newcommand{\printreferences}{%
+  \write\@auxout{%
+    \unexpanded{\gdef\application@referencesPrinted{references printed}}%
+  }%
+  \dolistloop{\cvEntry@references}%
+}
 
 %-- skill bars -----------------------------------------------------------------
 \newcommand{\skillBar}[2][]{%
