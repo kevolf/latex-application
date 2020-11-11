@@ -1147,12 +1147,18 @@
   \ifdefined\coverLetter@useHeader%
     \def\tmpTrue{true}%
     \def\tmpFalse{false}%
-    \ifx\coverLetter@useHeader\tmpTrue%
-      \header%
-    \else\ifx\coverLetter@useHeader\tmpFalse%
-    \else%
-      \header[\coverLetter@useHeader]%
-    \else%
+    \def\tmpNoContact{no_contact}%
+    \ifx\coverLetter@useHeader\tmpFalse%
+    \else
+      \ifx\coverLetter@useHeader\tmpTrue%
+        \header%
+      \else%
+        \ifx\coverLetter@useHeader\tmpNoContact%
+          \header*%
+        \else%
+          \header[\coverLetter@useHeader]%
+        \fi%
+      \fi%
     \fi%
   \fi%
   \begin{minipage}[t]{\textwidth}%
@@ -1184,54 +1190,6 @@
           width=\marginparwidth,%
           icon style=\textcolor{light_color},%
           text style=\textcolor{light_color}
-        ]{%
-          \coverLetter@recipientContact%
-        }%
-      \fi%
-    \end{minipage}%
-  }%
-}
-\newenvironment{coverletter*}[2][]{%
-  \pgfkeys{%
-    /cover letter,%
-    % set default values
-    header=true,%
-    ending=Yours,%
-    signature height=3.5em,%
-    #1%
-  }
-  \ifdefined\coverLetter@useHeader%
-    \header*%
-  \fi%
-  \begin{minipage}[t]{\textwidth}%
-    \textbf{#2\strut}\par\bigskip%
-}{%
-    \strut\par%
-    \coverLetter@ending\strut\par%
-    \ifdefined\coverLetter@signature%
-      \includegraphics[height=\coverLetter@signatureHeight]
-                      {\coverLetter@signature}%
-      \strut\par%
-    \fi%
-    \application@firstName~\application@lastName%
-  \end{minipage}%
-  \marginpar{%
-    \begin{minipage}[t]{\marginparwidth}%
-      \rightBoxedIcons[%
-        width=\marginparwidth,%
-        icon style=\textcolor{light_color},%
-        text style=\slshape\textcolor{light_color}%
-      ]{%
-        {%
-          {calendar}/{\today}%
-        }%
-      }%
-      \ifdefined\coverLetter@recipientContact%
-        \strut\par\bigskip%%
-        \rightBoxedIcons[%
-          width=\marginparwidth,%
-          icon style=\textcolor{light_color},%
-          text style=\textcolor{light_color}%
         ]{%
           \coverLetter@recipientContact%
         }%
