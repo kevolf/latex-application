@@ -377,8 +377,11 @@
   \sectionStyle%
 }
 [% after-code
+  \nobreak%
   \sectionRule%
 ]
+\newcommand{\sectionbreak}{%
+  \addpenalty{-1000}}%
 
 %-- subsection -----------------------------------------------------------------
 \titleformat
@@ -515,62 +518,62 @@
 %-- tikz styles ----------------------------------------------------------------
 \tikzset{
   skilltag_filled/.style = {
-    text=white,%
-    fill=skill_tag_color
-  },
+      text=white,%
+      fill=skill_tag_color
+    },
   skilltag_border/.style = {
-    text=skill_tag_color,%
-    draw=skill_tag_color,%
-    line width=.6pt
-  },
+      text=skill_tag_color,%
+      draw=skill_tag_color,%
+      line width=.6pt
+    },
   cv portrait/.style={
-    \portrait@Shape,
-    minimum width=\portrait@width,
-    minimum height=\portrait@width,
-    draw=light_color,%
-    fill=white,%
-    line width=0.5pt,%
-    fill overzoom image*={\portrait@options}{\application@portrait}
-  },
+      \portrait@Shape,
+      minimum width=\portrait@width,
+      minimum height=\portrait@width,
+      draw=light_color,%
+      fill=white,%
+      line width=0.5pt,%
+      fill overzoom image*={\portrait@options}{\application@portrait}
+    },
   cv portrait with shadow/.style={
-    cv portrait,
-    blur shadow={%
-      shadow scale=1.03,
-      shadow xshift=0pt,
-      shadow yshift=0pt,
-      opacity=.25,
-      fill=lightgray,
-      shadow blur steps=5
-    }
-  },
+      cv portrait,
+      blur shadow={%
+          shadow scale=1.03,
+          shadow xshift=0pt,
+          shadow yshift=0pt,
+          opacity=.25,
+          fill=lightgray,
+          shadow blur steps=5
+        }
+    },
   title portrait/.style={
-    \portrait@Shape,
-    minimum width=\sideBarWidth,
-    minimum height=\sideBarWidth,
-    draw=light_color,%
-    fill=white,%
-    line width=0.5pt,%
-    fill overzoom image*={\portrait@options}{\application@portrait}
-  },
+      \portrait@Shape,
+      minimum width=\sideBarWidth,
+      minimum height=\sideBarWidth,
+      draw=light_color,%
+      fill=white,%
+      line width=0.5pt,%
+      fill overzoom image*={\portrait@options}{\application@portrait}
+    },
   title portrait with shadow/.style={
-    title portrait,
-    blur shadow={%
-      shadow scale=1.03,
-      shadow xshift=0pt,
-      shadow yshift=0pt,
-      opacity=.25,
-      fill=lightgray,
-      shadow blur steps=5
-    }
-  },
+      title portrait,
+      blur shadow={%
+          shadow scale=1.03,
+          shadow xshift=0pt,
+          shadow yshift=0pt,
+          opacity=.25,
+          fill=lightgray,
+          shadow blur steps=5
+        }
+    },
   reference file/.style={
-    align=center,
-    anchor=north west,
-    draw,
-    fill=white,
-    inner sep = 0pt,
-    line width = \application@referenceLineWidth
-  }
+      align=center,
+      anchor=north west,
+      draw,
+      fill=white,
+      inner sep = 0pt,
+      line width = \application@referenceLineWidth
+    }
 }
 
 
@@ -611,9 +614,9 @@
 \setlength{\oldparskip}{\parskip}
 \newcommand{\@minipagerestore}{\setlength{\parskip}{\oldparskip}}
 \newcommand{\marginParagraph}[3][t]{%
-    \begin{minipage}[#1]{\textwidth}%
-      #3%
-    \end{minipage}%
+  \begin{minipage}[#1]{\textwidth}%
+    #3%
+  \end{minipage}%
   \marginpar{%
     \begin{minipage}[#1]{\marginparwidth}%
       #2%
@@ -748,23 +751,23 @@
     #1%
   }%
   \foreach \i / \s / \h [count=\c] in #2{%
-    \ifnum \c > 1%
-      \hspace{1.5\iconSep}\socialIcons@sepStyle{\socialIcons@sep}\hspace{1.5\iconSep}%
-    \fi%
-    \ifx\s\h%
-      \socialIcon[%
-        text style = \socialIcons@textStyle,
-        icon style = \socialIcons@iconStyle
-      ]{\i}{\s}
-    \else%
-      \href{\h}{%
+      \ifnum \c > 1%
+        \hspace{1.5\iconSep}\socialIcons@sepStyle{\socialIcons@sep}\hspace{1.5\iconSep}%
+      \fi%
+      \ifx\s\h%
         \socialIcon[%
           text style = \socialIcons@textStyle,
           icon style = \socialIcons@iconStyle
         ]{\i}{\s}
-      }%
-    \fi%
-  }%
+      \else%
+        \href{\h}{%
+          \socialIcon[%
+            text style = \socialIcons@textStyle,
+            icon style = \socialIcons@iconStyle
+          ]{\i}{\s}
+        }%
+      \fi%
+    }%
 }
 
 \pgfkeys{%
@@ -785,20 +788,20 @@
     #1%
   }%
   \foreach [count=\c] \i / \d / \h in #2{%
-    \ifnum\c>1%
-      \strut\par%
-    \fi%
-    \ifx\d\h%
-      \rightBoxed[\boxedIcons@width]%
+      \ifnum\c>1%
+        \strut\par%
+      \fi%
+      \ifx\d\h%
+        \rightBoxed[\boxedIcons@width]%
         {\boxedIcons@textStyle{\d}}%
         {\boxedIcons@iconStyle{\faIconStyle{\i}}}%
-    \else%
-      \href{\h}{%
-        \rightBoxed[\boxedIcons@width]%
+      \else%
+        \href{\h}{%
+          \rightBoxed[\boxedIcons@width]%
           {\boxedIcons@textStyle{\d}}%
           {\boxedIcons@iconStyle{\faIconStyle{\i}}}}%
-    \fi%
-  }%
+      \fi%
+    }%
 }
 \newcommand{\leftBoxedIcons}[2][]{%
   \pgfkeys{%
@@ -810,21 +813,21 @@
     #1%
   }%
   \foreach [count=\c] \i / \d / \h in #2{%
-    \ifnum\c>1%
-      \strut\par%
-    \fi%
-    \ifx\d\h%
-      \leftBoxed[\boxedIcons@width]%
+      \ifnum\c>1%
+        \strut\par%
+      \fi%
+      \ifx\d\h%
+        \leftBoxed[\boxedIcons@width]%
         {\boxedIcons@iconStyle{\faIconStyle{\i}}}%
         {\boxedIcons@textStyle{\d}}%
-    \else%
-      \href{\h}{%
-        \leftBoxed[\boxedIcons@width]%
+      \else%
+        \href{\h}{%
+          \leftBoxed[\boxedIcons@width]%
           {\boxedIcons@iconStyle{\faIconStyle{\i}}}%
           {\boxedIcons@textStyle{\d}}%
-      }%
-    \fi%
-  }%
+        }%
+      \fi%
+    }%
 }
 
 %-- cv elements ----------------------------------------------------------------
@@ -895,19 +898,19 @@
 }
 
 \newcommand{\skillTag}[1]{%
-    \tikz[baseline]%
-    \node[rounded corners=1pt,%
-          inner sep=2pt,%
-          anchor=base,
-          minimum height=1.2em,%
-          \application@skillTagStyle,
-          font=\skillTagTextStyle]{\vphantom{ABCEDEFGHIJKLMNOPQRSTUVWXYZabcedefghijklmnopqrstuvwxyz}#1};%
+  \tikz[baseline]%
+  \node[rounded corners=1pt,%
+    inner sep=2pt,%
+    anchor=base,
+    minimum height=1.2em,%
+    \application@skillTagStyle,
+    font=\skillTagTextStyle]{\vphantom{ABCEDEFGHIJKLMNOPQRSTUVWXYZabcedefghijklmnopqrstuvwxyz}#1};%
 }
 
 \newcommand{\skillTags}[1]{%
   \foreach \t in {#1}{%
-    \skillTag{\t}\,%
-  }%
+      \skillTag{\t}\,%
+    }%
 }
 
 %-- cv entry -------------------------------------------------------------------
@@ -928,33 +931,33 @@
     \addcontentsline{toc}{section}{#9}%
   \fi%
   \foreach [count=\c] \p in {#7}{%
-    \marginParagraph{%
-      \ifnum\c=1%
-        \referencePositionStyle{#1\strut}\par%
-        \referenceInstitutionStyle{#2\strut}\par\bigskip%
-        \referenceDateStyle{#3\strut}%
-        \isEmpty{#4}{}{%
-          \par%
-          \referenceLocationStyle{#4\strut}%
-        }%
-        \isEmpty{#5}{}{%
-          \par\bigskip%
-          \referenceDescriptionStyle{#5\strut}%
-        }%
-      \fi%
-    }{%
-      \tikz[baseline=-1em]\node[%
-       reference file%
-      ]{%
-       \includegraphics[%
-          width=\textwidth,%
-          page=\p,%
-          #8%
-        ]{#6}%
-      };%
+      \marginParagraph{%
+        \ifnum\c=1%
+          \referencePositionStyle{#1\strut}\par%
+          \referenceInstitutionStyle{#2\strut}\par\bigskip%
+          \referenceDateStyle{#3\strut}%
+          \isEmpty{#4}{}{%
+            \par%
+            \referenceLocationStyle{#4\strut}%
+          }%
+          \isEmpty{#5}{}{%
+            \par\bigskip%
+            \referenceDescriptionStyle{#5\strut}%
+          }%
+        \fi%
+      }{%
+        \tikz[baseline=-1em]\node[%
+          reference file%
+        ]{%
+          \includegraphics[%
+            width=\textwidth,%
+            page=\p,%
+            #8%
+          ]{#6}%
+        };%
+      }%
+      \clearpage%
     }%
-    \clearpage%
-  }%
 }
 \pgfkeys{%
   /references/.is family,
@@ -971,7 +974,7 @@
   % #2 -> file
   % #3 -> pages
   % #4 -> description
-  
+
   % parse pgfkeys
   \pgfkeys{%
     /references,%
@@ -986,14 +989,14 @@
   \listeadd{\cvEntry@references}{%
     \noexpand%
     \reference{\cvEntry@referencePosition}%
-              {\cvEntry@referenceInstution}%
-              {\cvEntry@date}%
-              {\cvEntry@location}%
-              {#4}%
-              {#2}%
-              {#3}%
-              {\reference@options}%
-              {\reference@tocTitle}%
+    {\cvEntry@referenceInstution}%
+    {\cvEntry@date}%
+    {\cvEntry@location}%
+    {#4}%
+    {#2}%
+    {#3}%
+    {\reference@options}%
+    {\reference@tocTitle}%
   }%
 
   \undef\reference@tocTitle%
@@ -1045,8 +1048,8 @@
 
   \ifdefined\cvEntry@reference%
     \addReference{\cvEntry@reference}%
-                 {\cvEntry@referencePages}%
-                 {\cvEntry@referenceDescription}%
+    {\cvEntry@referencePages}%
+    {\cvEntry@referenceDescription}%
   \fi%
   \marginParagraph{%
     \setlength{\parskip}{\cvEntry@parSkip}%
@@ -1097,25 +1100,25 @@
 
 %-- skill bars -----------------------------------------------------------------
 \newcommand{\skillBar}[2][]{%
-\progressbar[%
-  roundnessr=0.1,
-  width=\textwidth,
-  heighta=1ex,
-  filledcolor=skill_bar_color,
-  linecolor=skill_bar_color,
-  subdivisions=1,
-  emptycolor=white,
-  #1]{#2}
+  \progressbar[%
+    roundnessr=0.1,
+    width=\textwidth,
+    heighta=1ex,
+    filledcolor=skill_bar_color,
+    linecolor=skill_bar_color,
+    subdivisions=1,
+    emptycolor=white,
+    #1]{#2}
 }
 \newcommand{\skillBars}[2][ratio=0.25]{%
   \foreach \s / \p in {#2}{%
-    \twoColumns[#1]{%
-      \raggedleft%
-      \s%
-    }{%
-      \skillBar{\p}%
+      \twoColumns[#1]{%
+        \raggedleft%
+        \s%
+      }{%
+        \skillBar{\p}%
+      }%
     }%
-  }%
 }
 
 %-------------------------------------------------------------------------------
@@ -1123,12 +1126,12 @@
 %-------------------------------------------------------------------------------
 \newenvironment{cvitems}{%
   \begin{itemize}[%
-    leftmargin=1em,%
-    noitemsep,
-    topsep=0pt,
-    partopsep=0px
-  ]%
-}{%
+      leftmargin=1em,%
+      noitemsep,
+      topsep=0pt,
+      partopsep=0px
+    ]%
+    }{%
   \end{itemize}%
 }
 
@@ -1170,12 +1173,12 @@
   \fi%
   \begin{minipage}[t]{\textwidth}%
     \textbf{#2\strut}\par\bigskip%
-}{%
+    }{%
     \strut\par%
     \coverLetter@ending\strut\par%
     \ifdefined\coverLetter@signature%
       \includegraphics[height=\coverLetter@signatureHeight]
-                      {\coverLetter@signature}%
+      {\coverLetter@signature}%
       \strut\par%
     \fi%
     \application@firstName~\application@lastName%
@@ -1183,13 +1186,13 @@
   \marginpar{%
     \begin{minipage}[t]{\marginparwidth}%
       \rightBoxedIcons[%
-        width=\marginparwidth,%
-        icon style=\textcolor{light_color},%
-        text style=\slshape\textcolor{light_color}%
+      width=\marginparwidth,%
+      icon style=\textcolor{light_color},%
+      text style=\slshape\textcolor{light_color}%
       ]{%
-        {%
-          {calendar}/{\today}%
-        }%
+      {%
+      {calendar}/{\today}%
+      }%
       }%
       \ifdefined\coverLetter@recipientContact%
         \strut\par\bigskip%
