@@ -14,7 +14,8 @@ TEX_FILES += $(wildcard $(TEX_DIR)/*.tex)
 
 ###############################################################################
 # COMPILER SETTINGS
-TEX_FLAGS ?= -pdf -interaction=nonstopmode -output-directory=${OUT_DIR}
+TEX_FLAGS ?= -pdf
+TEX_FLAGS += -interaction=nonstopmode -output-directory=${OUT_DIR}
 
 ###############################################################################
 # COMMANDS
@@ -60,8 +61,7 @@ $(TEX_ROOT).pdf: $(TEX_DIR)/$(TEX_ROOT).tex
 # CLEAN COMPILABLE FILES
 clean:
 	$(MSG_START) $(CLEAN_MSG)
-	$(CMD_RM) $(MD_TEX_FILES)
-	$(CMD_LATEXMK) -c $(TEX_DIR)/$(TEX_ROOT).tex
+	$(CMD_LATEXMK) -c $(TEX_DIR)/$(TEX_ROOT).tex -output-directory=${OUT_DIR}
 	$(MSG_END) $(CLEAN_MSG)
 
 # Provide some help to the user
