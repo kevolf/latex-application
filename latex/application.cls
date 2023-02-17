@@ -25,6 +25,7 @@
 \newif\ifapplication@referencesToToc
 \newif\ifapplication@referencesLinks
 \newif\ifapplication@header
+\newif\ifapplication@dontLoadFont
 \pgfkeys{%
   /application/.cd, % working path for keys
   highlight_color/.store in      = {\application@highlightColor},
@@ -35,6 +36,7 @@
   cventry_parskip/.store in      = {\cvEntry@parSkip},
   cventry_sep/.store in          = {\cvEntry@sep},
   section_sep/.store in          = {\application@sectionSep},
+  subsection_sep/.store in       = {\application@subsectionSep},
   portrait_ratio/.store in       = {\application@portraitRatio},
   portrait_shape/.is choice,
   portrait_shape/circle/.code    = {\def\portrait@Shape{circle}},
@@ -43,24 +45,27 @@
   references_to_toc/.is if       = {application@referencesToToc},
   references_links/.is if        = {application@referencesLinks},
   header/.is if                  = {application@header},
+  default_font/.is if            = {application@dontLoadFont},
   referencelinewidth/.store in   = {\application@referenceLineWidth},
   % set default values
   highlight_color                = 4472A7,
   light_color                    = 677073,
   default_color                  = 001E26,
-  tag_style                      = skilltag_border,
+  tag_style                      = skilltag_border_rounded,
   cventry_parskip                = 3pt,
   cventry_sep                    = 0pt,
   section_sep                    = 2em plus 1em minus 1em,
+  subsection_sep                 = 1em plus 1em,
   portrait_shape                 = circle,
   marginparwidth                 = 4.5cm,
   portrait_ratio                 = 0.9,
   header                         = true,
+  default_font                   = false,
   references_to_toc              = true,
   references_links               = true,
   referencelinewidth             = 0pt,
   % filter handler to append any unprocessed options to a macro
-  /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingoptions
+  /pgf/key filter handlers/append filtered to/.install key filter handler=\remainingoptions%
 }
 \def\remainingoptions{}
 
@@ -69,7 +74,7 @@
 
 
 %-------------------------------------------------------------------------------
-%   BASE CLASS
+%   LOAD BASE CLASS
 %-------------------------------------------------------------------------------
 \PassOptionsToClass{\remainingoptions}{report}
 \LoadClass{report}
@@ -82,8 +87,9 @@
 \RequirePackage{fontspec}  % advanced font management
 
 %-- load fonts -----------------------------------------------------------------
-\RequirePackage[default,opentype]{sourcesanspro}
-
+\ifapplication@dontLoadFont\else
+  \RequirePackage[default,opentype]{sourcesanspro}
+\fi
 %-- additional packages --------------------------------------------------------
 \RequirePackage{babel} % (multi)language support
 \RequirePackage{calc} % advanced calculations with spaces
@@ -112,7 +118,7 @@
 %-------------------------------------------------------------------------------
 %   MARGINS AND PAGE LAYOUT
 %-------------------------------------------------------------------------------
-\reversemarginpar % put margin notes to the left
+\reversemarginpar% put margin notes to the left
 \geometry{%
   twoside=false,%
   left=.5cm,%
@@ -153,7 +159,7 @@
 \newlength{\iconSep}
 \setlength{\iconSep}{1ex}
 \newlength{\sideBarWidth}
-\setlength{\sideBarWidth}{\marginparwidth + \leftmargin}
+\setlength{\sideBarWidth}{\marginparwidth+\leftmargin}
 \newlength{\portrait@width}
 \setlength{\portrait@width}{\application@portraitRatio\marginparwidth}
 
@@ -219,296 +225,6 @@
 
 
 %-------------------------------------------------------------------------------
-%   TITLE PAGE
-%-------------------------------------------------------------------------------
-\newcommand{\subtitle}[1]{%
-  \def\@subtitle{#1}
-}
-
-\DeclareTranslationFallback{contact}{Contact}
-\DeclareTranslation{German}{contact}{Kontakt}
-\DeclareTranslation{English}{contact}{Contact}
-\DeclareTranslation{Spanish}{contact}{Contacto}
-
-\renewcommand{\maketitle}{%
-  \thispagestyle{empty}
-  \begin{titlepage}
-    \begin{tikzpicture}[remember picture, overlay]
-      \node[
-        minimum width  = \sideBarWidth,
-        minimum height = \paperheight,
-        anchor         = south west,
-        fill           = highlight_color
-      ] (side bar) at (current page.south west) {};
-      \ifdefined\application@portrait%
-        \node[
-          title portrait with shadow,
-          xshift=0.75\sideBarWidth,
-          yshift=-0.75\sideBarWidth
-        ] (portrait) at (current page.north west) {};%
-      \fi
-      \node[%
-        below      = 1.5\sideBarWidth of side bar.north east,
-        xshift     = -\marginparsep/2,
-        anchor     = north east,
-        align      = right,
-        inner sep  = 0pt,
-        text width = \sideBarWidth-\marginparsep,
-        font       = \color{white}
-      ] (first name) {
-        \cvTitlepageFirstNameStyle{\application@firstName\strut}
-      };
-      \node[%
-        below      = \parskip of first name.south,
-        anchor     = north,
-        align      = right,
-        inner sep  = 0pt,
-        text width = \sideBarWidth-\marginparsep,
-        font       = \color{white}
-      ] (last name) {
-        \cvTitlepageLastNameStyle{\application@lastName\strut}
-      };
-      \node[%
-        above      = 0.25\sideBarWidth of side bar.south east,
-        xshift     = -\marginparsep/2,
-        anchor     = south east,
-        align      = right,
-        inner sep  = 0pt,
-        text width = \sideBarWidth-\marginparsep,
-        font       = \color{white}
-      ] (contact) {%
-        \begin{minipage}{\marginparwidth}
-          \sectionStyle{\GetTranslation{contact}}%
-          \strut\par\bigskip%
-          \ifdefined\application@contact%
-            \rightBoxedContactInfo%
-          \fi%
-        \end{minipage}
-      };
-      \node[%
-        right     = \marginparsep,
-        anchor    = base west,
-        align     = right,
-        inner sep = 0pt,
-        font      = \color{highlight_color}
-      ] (title)  at (last name.base east) {
-        \cvTitlepageTitleStyle{\@title}
-      };
-      \ifdefined\application@position
-        \node[%
-          below      = 2\parskip,
-          anchor     = north east,
-          align      = right,
-          inner sep  = 0pt,
-          text width = \sideBarWidth-\marginparsep,
-          font       = \color{white}
-        ] (position) at (last name.east |- title.south west){
-          \ifdefined\application@positionShort
-            \cvTitlepagePosition{\application@positionShort}
-          \else
-            \cvTitlepagePosition{\application@position}
-          \fi
-        };
-      \fi
-      \ifdefined\@subtitle
-        \node[%
-          below     = 2\parskip of title.south west,
-          anchor    = north west,
-          align     = left,
-          inner sep = 0pt,
-          font      = \color{highlight_color}
-        ] (subtitle) {
-          \cvTitlepageSubtitleStyle{\@subtitle\strut}
-        };
-      \fi
-    \end{tikzpicture}
-  \end{titlepage}
-}
-
-%-------------------------------------------------------------------------------
-%   TITLES FORMAT AND SPACING
-%-------------------------------------------------------------------------------
-%-- chapter --------------------------------------------------------------------
-%\titleformat
-\gdef\chapterlabel{}
-\titleformat
-{% command
-  \chapter%
-}
-[% shape
-  hang%
-]
-{% format
-}
-{% label
-  \gdef\chapterlabel{\thechapter}
-}
-{% sep
-  0pt
-}
-{% before-code
-  \thispagestyle{chapter}
-  \chapterStyle
-}
-[% after-code
-  \ifnum\thechapter>0%
-    \clearpage%
-  \else%
-    \vspace{\chapterSep}%
-  \fi%
-]
-
-%-- section --------------------------------------------------------------------
-\titleformat
-{% command
-  \section%
-}
-[% shape
-  margin%
-]
-{% format
-}
-{% label
-}
-{% sep
-  0pt
-}
-{% before-code
-  \sectionStyle%
-}
-[% after-code
-  \nobreak%
-  \sectionRule%
-]
-\newcommand{\sectionbreak}{%
-  \addpenalty{-1000}}%
-
-%-- subsection -----------------------------------------------------------------
-\titleformat
-{% command
-  \subsection%
-}
-[% shape
-  margin%
-]
-{% format
-}
-{% label
-}
-{% sep
-  0pt%
-}
-{% before-code
-  \subsectionStyle%
-}
-
-%-- spacing --------------------------------------------------------------------
-%titlespacing{〈command〉}{〈left〉}{〈before-sep〉}{〈after-sep〉}[〈right-sep〉]
-%<space> plus <+tol> minus <-tol>
-\titlespacing{\chapter}{0pt}{1em plus 0.5em minus 0.5em}{0pt}
-\titlespacing{\section}{\marginparwidth}{\application@sectionSep}{\marginparsep}
-\titlespacing{\subsection}{\marginparwidth}{0pt}{\marginparsep}
-
-
-%-------------------------------------------------------------------------------
-%  TOC
-%-------------------------------------------------------------------------------
-\setcounter{tocdepth}{1}
-\cftsetindents{chapter}{2em}{1.5em}
-\renewcommand{\cftchapfont}{\TocChaperStyle}
-\renewcommand{\cftchapnumwidth}{2em}
-\renewcommand{\cftchappagefont}{\TocChaperPageStyle}
-\renewcommand{\cftchapafterpnum}{\par\bigskip}
-
-\cftsetindents{section}{4em}{1.5em}
-\renewcommand{\cftsecfont}{\TocSectionStyle}
-\renewcommand{\cftsecpagefont}{\TocSectionPageStyle}
-\renewcommand{\cftsecafterpnum}{\par\smallskip}
-\renewcommand{\cftsecdotsep}{\cftnodots}
-
-%-------------------------------------------------------------------------------
-%   HEADER AND FOOTER
-%-------------------------------------------------------------------------------
-\fancypagestyle{default}{%
-  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
-  \ifapplication@header%
-    \fancyhead[L]{%
-      \begin{minipage}[b]{\marginparwidth}%
-        \raggedleft%
-        \fancyHeadNameStyle{\application@firstName}{\application@lastName}
-      \end{minipage} %
-      \ifdefined\application@headIcons%
-        \hspace{0.5\marginparsep}%
-        \socialIcons[%
-          text style=\fancyHeadContactTextStyle,
-          icon style=\fancyHeadContactIconStyle,
-          sep style=\fancyHeadContactSepStyle
-        ]{%
-          \application@headIcons%
-        }
-      \fi%
-    }
-  \fi
-
-  \fancyfoot[L]{%
-    \begin{minipage}[b]{\marginparwidth}%
-      \raggedleft%
-      \fancyFootLeftStyle{\leftmark}
-    \end{minipage}
-    \hspace{0.5\marginparsep}%
-    \ifdefined\application@footIcons
-      \socialIcons[%
-        text style=\fancyFootSocialTextStyle,
-        icon style=\fancyFootSocialIconStyle,
-        sep style=\fancyFootSocialSepStyle
-      ]{%
-        \application@footIcons%
-      }
-    \fi
-  }
-
-  \fancyfoot[R]{%
-    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
-      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
-    \fi%
-  }
-}
-\fancypagestyle{chapter}{%
-  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
-}
-\fancypagestyle{nohead}{%
-  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
-  \fancyfoot[L]{%
-    \begin{minipage}[b]{\marginparwidth}%
-      \raggedleft%
-      \fancyFootLeftStyle{\leftmark}
-    \end{minipage}
-    \hspace{0.5\marginparsep}%
-    \ifdefined\application@footIcons
-      \socialIcons[%
-        text style=\fancyFootSocialTextStyle,
-        icon style=\fancyFootSocialIconStyle,
-        sep style=\fancyFootSocialSepStyle
-      ]{%
-        \application@footIcons%
-      }
-    \fi
-  }
-
-  \fancyfoot[R]{%
-    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
-      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
-    \fi%
-  }
-}
-
-\renewcommand{\headrule}{} % obere Trennlinie entfernen
-\fancyhfoffset[L]{\marginparwidth + \marginparsep}
-\pagestyle{default} % default to fancy page styles
-\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
-
-
-%-------------------------------------------------------------------------------
 %   TIKZ STYLES AND LIBRARIES
 %-------------------------------------------------------------------------------
 %-- tikz libraries -------------------------------------------------------------
@@ -517,15 +233,32 @@
 
 %-- tikz styles ----------------------------------------------------------------
 \tikzset{
+  skilltag_rounded/.style ={
+    % rounded corners=1pt,%
+  },
   skilltag_filled/.style = {
+      % skilltag_rounded,
       text=white,%
-      fill=skill_tag_color
+      fill=skill_tag_color,%
+      #1%
     },
   skilltag_border/.style = {
+      skilltag_rounded,
       text=skill_tag_color,%
       draw=skill_tag_color,%
-      line width=.6pt
+      line width=.6pt,%
+      #1%
     },
+  skilltag_filled_rounded/.style = {
+    skilltag_filled = {%
+      rounded corners=1pt%
+    }%
+  },
+  skilltag_border_rounded/.style = {
+    skilltag_border = {%
+      rounded corners=1pt%
+    }%
+  },
   cv portrait/.style={
       \portrait@Shape,
       minimum width=\portrait@width,
@@ -578,7 +311,7 @@
 
 
 %-------------------------------------------------------------------------------
-%   MAKRO DEFINITIONS
+%   PUBLIC MACRO DEFINITIONS
 %-------------------------------------------------------------------------------
 %-- personal information -------------------------------------------------------
 \newcommand{\name}[2]{\def\application@firstName{#1}\def\application@lastName{#2}}
@@ -601,7 +334,7 @@
 \newcommand{\centminus}{\texttt{\raisebox{0.0em}{-}}}
 
 \newcommand{\isEmpty}[3]{%
-  \def\temp{#1}\ifx\temp\empty
+  \def\temp{#1}\ifx\temp\empty%
     #2
   \else
     #3
@@ -619,6 +352,7 @@
   \end{minipage}%
   \marginpar{%
     \begin{minipage}[#1]{\marginparwidth}%
+      \raggedleft%
       #2%
     \end{minipage}%
   }%
@@ -689,7 +423,7 @@
     \application@contact%
   }%
 }
-\newcommand{\rightleftBoxedContactInfo}[1][]{%
+\newcommand{\leftBoxedContactInfo}[1][]{%
   \leftBoxedIcons[#1]{%
     \application@contact%
   }%
@@ -750,8 +484,8 @@
     sep=\centpipe,
     #1%
   }%
-  \foreach \i / \s / \h [count=\c] in #2{%
-      \ifnum \c > 1%
+  \foreach\i / \s / \h [count=\c] in #2{%
+      \ifnum\c > 1%
         \hspace{1.5\iconSep}\socialIcons@sepStyle{\socialIcons@sep}\hspace{1.5\iconSep}%
       \fi%
       \ifx\s\h%
@@ -787,7 +521,7 @@
     icon style={},%
     #1%
   }%
-  \foreach [count=\c] \i / \d / \h in #2{%
+  \foreach[count=\c] \i / \d / \h in #2{%
       \ifnum\c>1%
         \strut\par%
       \fi%
@@ -812,7 +546,7 @@
     icon style={},%
     #1%
   }%
-  \foreach [count=\c] \i / \d / \h in #2{%
+  \foreach[count=\c] \i / \d / \h in #2{%
       \ifnum\c>1%
         \strut\par%
       \fi%
@@ -835,7 +569,6 @@
   \thispagestyle{nohead}
   \vspace*{-\headsep}
   \marginParagraph{%
-    \raggedleft%
     \ifdefined\application@portrait%
       \begin{tikzpicture}%
         \node[
@@ -873,7 +606,6 @@
   \thispagestyle{nohead}
   \vspace*{-\headsep}
   \marginParagraph{%
-    \raggedleft%
     \ifdefined\application@portrait%
       \begin{tikzpicture}%
         \node[
@@ -899,17 +631,17 @@
 
 \newcommand{\skillTag}[1]{%
   \tikz[baseline]%
-  \node[rounded corners=1pt,%
+  \node[
     inner sep=2pt,%
     anchor=base,
     minimum height=1.2em,%
-    \application@skillTagStyle,
+    \application@skillTagStyle,%
     font=\skillTagTextStyle]{\vphantom{ABCEDEFGHIJKLMNOPQRSTUVWXYZabcedefghijklmnopqrstuvwxyz}#1};%
 }
 
 \newcommand{\skillTags}[1]{%
-  \foreach \t in {#1}{%
-      \skillTag{\t}\,%
+  \foreach\tag in {#1}{%
+      \skillTag{\tag}\,%
     }%
 }
 
@@ -930,7 +662,7 @@
   \ifapplication@referencesToToc%
     \addcontentsline{toc}{section}{#9}%
   \fi%
-  \foreach [count=\c] \p in {#7}{%
+  \foreach[count=\c] \p in {#7}{%
       \marginParagraph{%
         \ifnum\c=1%
           \referencePositionStyle{#1\strut}\par%
@@ -1067,9 +799,9 @@
     \cvEntryPositionStyle{#2}~~\cvEntryInstitutionStyle{#3\strut}%
     \ifapplication@referencesLinks%
       \ifdefined\cvEntry@reference%
-        \ifdefined\application@referencesPrinted
+        \ifdefined\application@referencesPrinted%
           \hfill\hyperref[\cvEntry@reference]{\textcolor{light_color}{\faIconStyle{link}}}%
-        \fi
+        \fi%
       \fi%
     \fi%
     \isEmpty{#6}{}{%
@@ -1084,7 +816,7 @@
     \isEmpty{#7}{}{%
       \par%
       \begin{minipage}{\textwidth}%
-        \setlength{\parskip}{\cvEntry@parSkip}
+        \setlength{\parskip}{\cvEntry@parSkip}%
         \cvEntryDescriptionStyle{#7}%
       \end{minipage}%
     }%
@@ -1111,7 +843,7 @@
     #1]{#2}
 }
 \newcommand{\skillBars}[2][ratio=0.25]{%
-  \foreach \s / \p in {#2}{%
+  \foreach\s / \p in {#2}{%
       \twoColumns[#1]{%
         \raggedleft%
         \s%
@@ -1120,6 +852,7 @@
       }%
     }%
 }
+
 
 %-------------------------------------------------------------------------------
 %   ENVIRONMENTS
@@ -1207,6 +940,328 @@
     \end{minipage}%
   }%
 }
+
+
+%-------------------------------------------------------------------------------
+%   TITLE PAGE
+%-------------------------------------------------------------------------------
+\newcommand{\subtitle}[1]{%
+  \def\@subtitle{#1}
+}
+
+\DeclareTranslationFallback{contact}{Contact}
+\DeclareTranslation{German}{contact}{Kontakt}
+\DeclareTranslation{English}{contact}{Contact}
+\DeclareTranslation{Spanish}{contact}{Contacto}
+
+\renewcommand{\maketitle}{%
+  \thispagestyle{empty}
+  \begin{titlepage}
+    \begin{tikzpicture}[remember picture, overlay]
+      \node[
+        minimum width  = \sideBarWidth,
+        minimum height = \paperheight,
+        anchor         = south west,
+        fill           = highlight_color
+      ] (side bar) at (current page.south west) {};
+      \ifdefined\application@portrait%
+        \node[
+          title portrait with shadow,
+          xshift=0.75\sideBarWidth,
+          yshift=-0.75\sideBarWidth
+        ] (portrait) at (current page.north west) {};%
+      \fi
+      \node[%
+        below      = 1.5\sideBarWidth of side bar.north east,
+        xshift     = -\marginparsep/2,
+        anchor     = north east,
+        align      = right,
+        inner sep  = 0pt,
+        text width = \sideBarWidth-\marginparsep,
+        font       = \color{white}
+      ] (first name) {
+        \cvTitlepageFirstNameStyle{\application@firstName\strut}
+      };
+      \node[%
+        below      = \parskip of first name.south,
+        anchor     = north,
+        align      = right,
+        inner sep  = 0pt,
+        text width = \sideBarWidth-\marginparsep,
+        font       = \color{white}
+      ] (last name) {
+        \cvTitlepageLastNameStyle{\application@lastName\strut}
+      };
+      \node[%
+        above      = 0.25\sideBarWidth of side bar.south east,
+        xshift     = -\marginparsep/2,
+        anchor     = south east,
+        align      = right,
+        inner sep  = 0pt,
+        text width = \sideBarWidth-\marginparsep,
+        font       = \color{white}
+      ] (contact) {%
+        \begin{minipage}{\marginparwidth}
+          \sectionStyle{\GetTranslation{contact}}%
+          \strut\par\bigskip%
+          \ifdefined\application@contact%
+            \rightBoxedContactInfo%
+          \fi%
+        \end{minipage}
+      };
+      \node[%
+        right     = \marginparsep,
+        anchor    = base west,
+        align     = right,
+        inner sep = 0pt,
+        font      = \color{highlight_color}
+      ] (title)  at (last name.base east) {
+        \cvTitlepageTitleStyle{\@title}
+      };
+      \ifdefined\application@position
+        \node[%
+          below      = 2\parskip,
+          anchor     = north east,
+          align      = right,
+          inner sep  = 0pt,
+          text width = \sideBarWidth-\marginparsep,
+          font       = \color{white}
+        ] (position) at (last name.east |- title.south west){
+          \ifdefined\application@positionShort
+            \cvTitlepagePosition{\application@positionShort}
+          \else
+            \cvTitlepagePosition{\application@position}
+          \fi
+        };
+      \fi
+      \ifdefined\@subtitle
+        \node[%
+          below     = 2\parskip of title.south west,
+          anchor    = north west,
+          align     = left,
+          inner sep = 0pt,
+          font      = \color{highlight_color}
+        ] (subtitle) {
+          \cvTitlepageSubtitleStyle{\@subtitle\strut}
+        };
+      \fi
+    \end{tikzpicture}
+  \end{titlepage}
+}
+
+
+\newcommand{\appliaction@titleFormatHelper}[2]{%
+  % This command helps to set the title style and spacing based
+  % on <cs name> of the corresponding sectioning command.
+  % This helps us to toggle different title shapes in the document with
+  % the two macros \setSectionShape and \setSubsectonShape defined below.
+  \edef\tmp{%
+    % We need some expansion control trickery here to get the call of \titleformat
+    % semantically correct.
+    % Basically the macros derived from the provided <cs name> in #1 must not be
+    % expanded before \titleformat. To achieve this we pack the \titleformat call
+    % in a \edef prefixed with \noexpand to expand all its arguments before.
+    % The expansion of the macro defined by <cs name> is then suppressed by
+    % \expandafter\noexpand\csname <cs name> \endcsname.
+    % This triggers an expansion of \csname while the macro behind <cs name>
+    % stays unexpanded.
+    \noexpand\titleformat%
+    {%
+      \expandafter\noexpand\csname #1\endcsname%
+      % \tmp%
+    }
+    [% shape
+    #2%
+    ]
+    {% format
+    }
+    {% label
+    }
+    {% sep
+      0pt
+    }
+    {% before-code
+      \ifstrequal{#2}{margin}{% #2 == margin
+        \raggedleft%
+      }{% else
+        % \centering%
+      }%
+      \expandafter\noexpand\csname #1Style\endcsname%
+    }
+    [% after-code
+    \ifstrequal{#2}{margin}{% #2 == margin
+      \expandafter\noexpand\csname #1Rule\endcsname%
+    }{% else
+    }%
+    ]%
+    \ifstrequal{#2}{margin}{% #2 == margin
+      \noexpand\titlespacing{%
+        \expandafter\noexpand\csname #1\endcsname%
+      }{\marginparwidth}{%
+        \expandafter\noexpand\csname application@#1Sep\endcsname%
+      }{\marginparsep}%
+    }{% else
+      \noexpand\titlespacing{%
+        \expandafter\noexpand\csname #1\endcsname%
+      }{0pt}{%
+        \expandafter\noexpand\csname application@#1Sep\endcsname%
+      }{*1}%
+    }%
+  }%
+  \show\tmp%
+  \tmp%
+}
+\newcommand{\setSectionShape}[1][margin]{%
+  \appliaction@titleFormatHelper{section}{#1}
+}
+\newcommand{\setSubsectionShape}[1][margin]{%
+  \appliaction@titleFormatHelper{subsection}{#1}
+}
+
+%-------------------------------------------------------------------------------
+%   TITLES FORMAT AND SPACING
+%-------------------------------------------------------------------------------
+%-- chapter --------------------------------------------------------------------
+%\titleformat
+\gdef\chapterlabel{}
+\titleformat%
+{% command
+  \chapter%
+}
+[% shape
+  hang%
+]
+{% format
+}
+{% label
+  \gdef\chapterlabel{\thechapter}
+}
+{% sep
+  0pt
+}
+{% before-code
+  \thispagestyle{chapter}%
+  \chapterStyle%
+}
+[% after-code
+  \ifnum\thechapter>0%
+    \clearpage%
+  \else%
+    \vspace{\chapterSep}%
+  \fi%
+]
+
+%-- section --------------------------------------------------------------------
+\setSectionShape%
+
+%-- subsection -----------------------------------------------------------------
+\setSubsectionShape%
+
+%-- spacing --------------------------------------------------------------------
+%titlespacing{〈command〉}{〈left〉}{〈before-sep〉}{〈after-sep〉}[〈right-sep〉]
+%<space> plus <+tol> minus <-tol>
+\titlespacing{\chapter}{0pt}{1em plus 0.5em minus 0.5em}{0pt}
+
+% prevent headlines before breaks
+\newcommand{\sectionbreak}{\addpenalty{-1000}}%
+
+%-------------------------------------------------------------------------------
+%  TOC
+%-------------------------------------------------------------------------------
+\setcounter{tocdepth}{1}
+\cftsetindents{chapter}{2em}{1.5em}
+\renewcommand{\cftchapfont}{\TocChaperStyle}
+\renewcommand{\cftchapnumwidth}{2em}
+\renewcommand{\cftchappagefont}{\TocChaperPageStyle}
+\renewcommand{\cftchapafterpnum}{\par\bigskip}
+
+\cftsetindents{section}{4em}{1.5em}
+\renewcommand{\cftsecfont}{\TocSectionStyle}
+\renewcommand{\cftsecpagefont}{\TocSectionPageStyle}
+\renewcommand{\cftsecafterpnum}{\par\smallskip}
+\renewcommand{\cftsecdotsep}{\cftnodots}
+
+%-------------------------------------------------------------------------------
+%   HEADER AND FOOTER
+%-------------------------------------------------------------------------------
+\fancypagestyle{default}{%
+  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
+  \ifapplication@header%
+    \fancyhead[L]{%
+      \begin{minipage}[b]{\marginparwidth}%
+        \raggedleft%
+        \fancyHeadNameStyle{\application@firstName}{\application@lastName}
+      \end{minipage} %
+      \ifdefined\application@headIcons%
+        \hspace{0.5\marginparsep}%
+        \socialIcons[%
+          text style=\fancyHeadContactTextStyle,
+          icon style=\fancyHeadContactIconStyle,
+          sep style=\fancyHeadContactSepStyle%
+        ]{%
+          \application@headIcons%
+        }
+      \fi%
+    }
+  \fi
+
+  \fancyfoot[L]{%
+    \begin{minipage}[b]{\marginparwidth}%
+      \raggedleft%
+      \fancyFootLeftStyle{\leftmark}
+    \end{minipage}
+    \hspace{0.5\marginparsep}%
+    \ifdefined\application@footIcons
+      \socialIcons[%
+        text style=\fancyFootSocialTextStyle,
+        icon style=\fancyFootSocialIconStyle,
+        sep style=\fancyFootSocialSepStyle%
+      ]{%
+        \application@footIcons%
+      }
+    \fi
+  }
+
+  \fancyfoot[R]{%
+    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
+      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
+    \fi%
+  }
+}
+\fancypagestyle{chapter}{%
+  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
+}
+\fancypagestyle{nohead}{%
+  \fancyhf{} % alle Kopf- und Fußzeilenfelder bereinigen
+  \fancyfoot[L]{%
+    \begin{minipage}[b]{\marginparwidth}%
+      \raggedleft%
+      \fancyFootLeftStyle{\leftmark}
+    \end{minipage}
+    \hspace{0.5\marginparsep}%
+    \ifdefined\application@footIcons
+      \socialIcons[%
+        text style=\fancyFootSocialTextStyle,
+        icon style=\fancyFootSocialIconStyle,
+        sep style=\fancyFootSocialSepStyle%
+      ]{%
+        \application@footIcons%
+      }
+    \fi
+  }
+
+  \fancyfoot[R]{%
+    \ifnum\zref@extractdefault{LastPage}{page}{0}>1%
+      \fancyFootPageStyle{\thepage}{\zref@extractdefault{LastPage}{page}{0}}%
+    \fi%
+  }
+}
+
+\renewcommand{\headrule}{} % obere Trennlinie entfernen
+\fancyhfoffset[L]{\marginparwidth+\marginparsep}
+\pagestyle{default} % default to fancy page styles
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+
 
 
 %-------------------------------------------------------------------------------
