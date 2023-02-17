@@ -1,31 +1,29 @@
-%-------------------------------------------------------------------------------
-%-- define colors
-%-------------------------------------------------------------------------------
-\colorlet{skill_tag_color}{highlight_color}
-\colorlet{skill_bar_color}{highlight_color}
+% -------------------------------------------------------------------------------
+% -- define colors
+% -------------------------------------------------------------------------------
 
-%-------------------------------------------------------------------------------
-%-- configure document style
-%-------------------------------------------------------------------------------
-%-- titlepage ------------------------------------------------------------------
+% -------------------------------------------------------------------------------
+% -- configure document style
+% -------------------------------------------------------------------------------
+% -- titlepage ------------------------------------------------------------------
 \renewcommand{\cvTitlepageFirstNameStyle}[1]{%
   {%
     \fontsize{28pt}{1em}%
-    \upshape%
+    \sffamily%
     #1%
   }%
 }
 \renewcommand{\cvTitlepageLastNameStyle}[1]{%
   {%
     \fontsize{28pt}{1em}%
-    \bfseries%
+    \sffamily\bfseries%
     #1%
   }%
 }
 \renewcommand{\cvTitlepageTitleStyle}[1]{%
   {%
     \fontsize{60pt}{1em}%
-    \bfseries%
+    \sffamily\bfseries%
     \MakeUppercase{#1}%
   }%
 }
@@ -44,19 +42,19 @@
   }%
 }
 
-%-- title styles ---------------------------------------------------------------
+% -- title styles ---------------------------------------------------------------
 \renewcommand{\chapterStyle}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
     \fill[
-      color=highlight_color
+    color=highlight_color
     ] (current page.south west) rectangle ++(\sideBarWidth,\paperheight);
     \node[%
-      anchor=north west,
-      align=left,
-      rotate=90,
-      minimum height=\sideBarWidth,
-      minimum width=\pageheight,
-      font=\LARGE\color{white}
+    anchor=north west,
+    align=left,
+    rotate=90,
+    minimum height=\sideBarWidth,
+    minimum width=\pageheight,
+    font=\Large\sffamily\color{white}
     ] at (current page.south west)
     {\resizebox{!}{0.3\sideBarWidth}{\MakeUppercase{#1}}};
   \end{tikzpicture}
@@ -65,32 +63,29 @@
     \fontsize{120pt}{1em}%
     \upshape%
     \color{highlight_color}%
-    \chapterlabel
+    \chapterlabel%
   }
 }
 \renewcommand{\sectionStyle}[1]{%
   {%
     \fontsize{14pt}{1em}%
-    \scshape%
-    \addfontfeature{LetterSpace=8.0}%
+    \sffamily
+    % \addfontfeature{LetterSpace=8.0}%
     \MakeUppercase{#1}%
-  }
-}
-\renewcommand{\subsectionStyle}[1]{%
-  {%
-    \fontsize{12pt}{1em}%
-    \scshape%
-    #1%
   }%
 }
+\renewcommand{\subsectionStyle}[1]{%
+  \cvEntryDateStyle{#1}%
+}
+\renewcommand{\sectionRule}{\titlerule[1pt]\\[0.8em]}
 
-%-- toc styles -----------------------------------------------------------------
+% -- toc styles -----------------------------------------------------------------
 \renewcommand{\TocChaperStyle}{\Large}
 \renewcommand{\TocChaperPageStyle}{\Large\color{highlight_color}}
-\renewcommand{\TocSectionStyle}{\large}
+\renewcommand{\TocSectionStyle}{\large\color{light_color}}
 \renewcommand{\TocSectionPageStyle}{\large\color{highlight_color}}
 
-%-- fancy header / footer ------------------------------------------------------
+% -- fancy header / footer ------------------------------------------------------
 \renewcommand{\fancyHeadNameStyle}[2]{%
   \textcolor{light_color}{#1~#2}
 }
@@ -121,10 +116,11 @@
   \textcolor{light_color}{/#2}%
 }
 
-%-- cv header ------------------------------------------------------------------
+% -- header ---------------------------------------------------------------------
 \renewcommand{\headerFirstNameStyle}[1]{%
   {%
     \fontsize{32pt}{1em}%
+    \rmfamily%
     \upshape%
     \color{highlight_color}%
     #1%
@@ -133,6 +129,7 @@
 \renewcommand{\headerLastNameStyle}[1]{%
   {%
     \fontsize{32pt}{1em}%
+    \rmfamily%
     \bfseries%
     \color{highlight_color}%
     #1%
@@ -141,25 +138,27 @@
 \renewcommand{\headerPosition}[1]{%
   {%
     \fontsize{12pt}{1em}%
+    \rmfamily%
     \slshape%
     \textcolor{light_color}{#1}%
   }%
 }
 
-%-- cv entry elements ----------------------------------------------------------
+% -- cv entry elements ----------------------------------------------------------
 \renewcommand{\cvEntryPositionStyle}[1]{%
   {%
     \fontsize{12pt}{1em}%
+    \rmfamily%
     \bfseries%
-    \color{light_color}%
+    % \color{highlight_color}%
     #1%
   }%
 }
 \renewcommand{\cvEntryInstitutionStyle}[1]{%
   {%
     \fontsize{12pt}{1em}%
-    \upshape%
     \color{light_color}%
+    \rmfamily%
     #1%
   }%
 }
@@ -167,42 +166,66 @@
   {%
     \fontsize{12pt}{1em}%
     \slshape%
-    \color{light_color}%
-    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
+    \rmfamily%
+    \textcolor{light_color}{#1}%
+    % \rightBoxed[\marginparwidth]{#1}{\faIconStyle{calendar}}%
   }%
 }
 \renewcommand{\cvEntryLocationStyle}[1]{%
   {%
     \slshape%
-    \color{highlight_color}%
-    \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
+    \rmfamily%
+    \textcolor{light_color}{#1}%
+    % \rightBoxed[\marginparwidth]{#1}{\faIconStyle{map-marker-alt}}%
   }%
 }
 \renewcommand{\cvEntryMarginNoteStyle}[1]{%
   {%
     \slshape%
-    \color{light_color}%
-    \rightBoxed[\marginparwidth]{#1}{\faIconStyle[regular]{info-circle}}%
+    \rmfamily%
+    \textcolor{light_color}{#1}%
   }%
 }
-\renewcommand{\cvEntryDescriptionStyle}[1]{#1}
+\renewcommand{\cvEntryDescriptionStyle}[1]{
+  {%
+    \rmfamily%
+    #1%
+  }%
+}
 \renewcommand{\cvEntryShortDescriptionStyle}[1]{%
   {%
     \upshape%
-    \color{highlight_color}%
+    \rmfamily%
+    \color{light_color}%
     #1%
   }%
 }
 
-%-- reference elements ---------------------------------------------------------
+% -- reference elements ---------------------------------------------------------
 \renewcommand{\referencePositionStyle}[1]{\sectionStyle{#1}}
 \renewcommand{\referenceInstitutionStyle}[1]{\subsectionStyle{#1}}
-\renewcommand{\referenceDateStyle}[1]{\cvEntryDateStyle{#1}}
-\renewcommand{\referenceLocationStyle}[1]{\cvEntryLocationStyle{#1}}
+\renewcommand{\referenceDateStyle}[1]{%
+  {%
+    \slshape%
+    \rmfamily%
+    \color{light_color}%
+    #1%
+  }%
+}
+\renewcommand{\referenceLocationStyle}[1]{%
+  {%
+    \slshape%
+    \rmfamily%
+    \color{light_color}%
+    #1%
+  }%
+}
 \renewcommand{\referenceDescriptionStyle}[1]{\cvEntryMarginNoteStyle{#1}}
 
-%-- other ----------------------------------------------------------------------
+% -- other ----------------------------------------------------------------------
 \renewcommand{\skillTagTextStyle}{%
   \fontsize{8pt}{1em}%
   \upshape%
+  \rmfamily%
 }
+\renewcommand{\faIconStyle}[2][regular]{\small\faIcon[#1]{#2}}
