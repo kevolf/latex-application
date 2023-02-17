@@ -1,0 +1,41 @@
+%-------------------------------------------------------------------------------
+%-- document class
+%-------------------------------------------------------------------------------
+\documentclass[
+  a4paper,    % paper type
+  english,    % document language
+  style              = academia,
+  % highlight_color    = 4472A7,
+  % light_color        = 677073,
+  % default_color      = 001E26,
+  tag_style          = skilltag_border,
+  % cventry_parskip    = 3pt,
+  % cventry_sep        = 0pt,
+  % section_sep        = 2em plus 1em minus 1em,
+  % subsection_sep     = 1em plus 1em,
+  % portrait_shape     = circle,
+  % marginparwidth     = 4.5cm,
+  % portrait_ratio     = 0.9,
+  % header             = true,
+  default_font       = true,
+  % references_to_toc  = true,
+  % references_links   = true,
+  % referencelinewidth = 0pt,
+]{application}
+
+\tikzset{
+  academia_tags/.style ={
+    text=skill_tag_color,%
+    draw=skill_tag_color,%
+  },
+  academia_tags_filled/.style ={
+    text=white,
+    fill=skill_tag_color,%
+    draw=skill_tag_color,%
+  }
+}
+
+%-------------------------------------------------------------------------------
+%-- document content
+%-------------------------------------------------------------------------------
+\input{common}

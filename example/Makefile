@@ -1,10 +1,15 @@
-# SPECIFY TARGET NAME
-TEX_ROOT = main
+MAKE_FILES = $(wildcard main_*.mk)
+PDF_FILES = $(MAKE_FILES:%.mk=out/%.pdf)
 
-TEX_FLAGS = -interaction=nonstopmode
-TEX_FLAGS += -lualatex
-TEX_FLAGS += -output-directory=./out
 
-export TEXINPUTS += ./tex:../latex:
+define make_clean
+	${MAKE} -f $1 clean;
+endef
 
-include ../LaTeX.make
+all: $(PDF_FILES)
+
+out/%.pdf: %.mk
+	${MAKE} -f $<
+
+clean:
+	$(foreach MAKE_FILE, ${MAKE_FILES}, $(call make_clean, ${MAKE_FILE}))
