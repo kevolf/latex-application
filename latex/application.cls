@@ -1108,7 +1108,6 @@
       }{*1}%
     }%
   }%
-  \show\tmp%
   \tmp%
 }
 \newcommand{\setSectionShape}[1][margin]{%
