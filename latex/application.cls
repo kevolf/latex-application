@@ -266,7 +266,7 @@
       draw=light_color,%
       fill=white,%
       line width=0.5pt,%
-      fill overzoom image*={\portrait@options}{\application@portrait}
+      fill overzoom image={\application@portrait}
     },
   cv portrait with shadow/.style={
       cv portrait,
@@ -286,7 +286,7 @@
       draw=light_color,%
       fill=white,%
       line width=0.5pt,%
-      fill overzoom image*={\portrait@options}{\application@portrait}
+      fill overzoom image={\application@portrait}
     },
   title portrait with shadow/.style={
       title portrait,
@@ -323,10 +323,7 @@
 \newcommand{\contact}[1]{\def\application@contact{#1}}
 \newcommand{\footIcons}[1]{\def\application@footIcons{#1}}
 \newcommand{\headIcons}[1]{\def\application@headIcons{#1}}
-\newcommand{\portrait}[2][]{%
-  \def\portrait@options{#1}
-  \def\application@portrait{#2}
-}
+\newcommand{\portrait}[1]{\def\application@portrait{#1}}
 
 %-- utility commands------------------------------------------------------------
 \newcommand{\centpipe}{\texttt{\raisebox{0em}{|}}}
@@ -635,8 +632,7 @@
     inner sep=2pt,%
     anchor=base,
     minimum height=1.2em,%
-    \application@skillTagStyle,%
-    font=\skillTagTextStyle]{\vphantom{ABCEDEFGHIJKLMNOPQRSTUVWXYZabcedefghijklmnopqrstuvwxyz}#1};%
+    \application@skillTagStyle]{\vphantom{ABCEDEFGHIJKLMNOPQRSTUVWXYZabcedefghijklmnopqrstuvwxyz}\skillTagTextStyle{#1}};%
 }
 
 \newcommand{\skillTags}[1]{%
