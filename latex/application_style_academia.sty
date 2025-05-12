@@ -1,6 +1,32 @@
 % -------------------------------------------------------------------------------
-% -- define colors
+% -- define fonts
 % -------------------------------------------------------------------------------
+\RequirePackage{fontspec}
+\setsansfont[
+  Ligatures        = TeX,
+  % Numbers          = OldStyle,
+  Extension        = .otf,
+  UprightFont      = *-Regular,
+  ItalicFont       = *-Italic,
+  BoldFont         = *-Bold,
+  BoldItalicFont   = *-BoldItalic,
+]{Iwona}
+\setmainfont[
+  Ligatures        = TeX,
+  % Numbers          = OldStyle,
+  Extension        = .otf,
+  UprightFont      = *-regular,
+  ItalicFont       = *-italic,
+  BoldFont         = *-bold,
+  BoldItalicFont   = *-bolditalic,
+]{texgyrepagella} % Palatino clone
+\setmonofont[%
+  Scale            = 0.85,
+  Extension        = .ttf,
+  BoldFont         = *-Bold,
+  ItalicFont       = *-Oblique,
+  BoldItalicFont   = *-BoldOblique
+]{DejaVuSansMono}
 
 % -------------------------------------------------------------------------------
 % -- configure document style
@@ -69,8 +95,9 @@
 \renewcommand{\sectionStyle}[1]{%
   {%
     \fontsize{14pt}{1em}%
-    \sffamily
-    % \addfontfeature{LetterSpace=8.0}%
+    \sffamily%
+    % \scshape%
+    \addfontfeature{LetterSpace=8.0}%
     \MakeUppercase{#1}%
   }%
 }
@@ -223,9 +250,10 @@
 \renewcommand{\referenceDescriptionStyle}[1]{\cvEntryMarginNoteStyle{#1}}
 
 % -- other ----------------------------------------------------------------------
-\renewcommand{\skillTagTextStyle}{%
+\renewcommand{\skillTagTextStyle}[1]{%
   \fontsize{8pt}{1em}%
-  \upshape%
-  \rmfamily%
+  \scshape%
+  \sffamily%
+  \MakeLowercase{#1}
 }
 \renewcommand{\faIconStyle}[2][regular]{\small\faIcon[#1]{#2}}
